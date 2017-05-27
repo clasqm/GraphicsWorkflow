@@ -1,0 +1,10 @@
+#!/bin/sh
+cd /boot/home/projects/ports/XXXX
+package create -b XXXX.hpkg
+sleep 0.5
+package add XXXX.hpkg data documentation apps bin add-ons boot
+sleep 0.5
+addattr BeShare:Info "XXXXXXXXXXXXXXXXXXXXXXXX" XXXX.hpkg
+becopy XXXX.hpkg "/Storage/Haiku/My ports"
+mv XXXX.hpkg /boot/home/projects/repo2
+sync
