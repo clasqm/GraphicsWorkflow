@@ -1,16 +1,19 @@
-name				Package
+name				flipimage
 version				0.1-1
-architecture		x86_gcc2
+architecture			x86_gcc2
 
-summary			"short description"
-Description			"longer description"
+summary			"Flip images vertically"
+Description			"A small applet to flip images vertically and save the resulting image using ImageMagick.
 
-packager			"name of packager <whoever@email.com>"
-vendor				"vendor name"
-copyrights			"copyright owner"
-licenses			"license"
+Planned to be part of a larger graphics workflow application, but can be used standalone.
+"
+
+packager			"Michel Clasquin-Johnson <clasqm@mail.com>"
+vendor				"clasqm"
+copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
+licenses				"Public Domain"
 provides {
-					Package = 0.1-1
+					flipimage = 0.1-1
 }
 requires {
 					yab
