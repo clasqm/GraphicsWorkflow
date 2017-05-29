@@ -1,0 +1,26 @@
+name				flopimage
+version				0.1-1
+architecture			x86_gcc2
+
+summary			"Flip images horizontally"
+Description			"A small applet to flip images horizontally and save the resulting image using ImageMagick.
+
+Planned to be part of a larger graphics workflow application, but can be used standalone.
+"
+
+packager			"Michel Clasquin-Johnson <clasqm@mail.com>"
+vendor				"clasqm"
+copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
+licenses				"Public Domain"
+provides {
+					flopimage = 0.1-1
+}
+requires {
+					yab
+					imagemagick
+					filedate
+					filesize
+					imagsize
+					libclasqm
+}
+

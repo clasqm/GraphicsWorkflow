@@ -1,0 +1,28 @@
+sub MakeButtons(sequence)
+	local bottomrowx1, bottomrowx2, bottomrowy, midrowx1, midrowx2, midrowy, toprowx1, toprowx2, toprowy
+	bottomrowy = winheight -30: midrowy = winheight -60: toprowy = winheight -90
+	bottomrowx1 = 5: midrowx1 = 5: toprowx1 = 5
+	bottomrowx2 = winwidth/2 + 10: midrowx2 = winwidth/2 + 10: toprowx2 = winwidth/2 + 10
+	if sequence then 
+		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitandquitbutton", "DO IT!", "MainWindow" 
+		tooltip "doitandquitbutton", "Flip this image horizontally,update the\npreview, save the file and quit."
+	else
+		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitbutton", "DO IT!", "MainWindow" 
+		tooltip "doitbutton", "Flip this image horizontally and\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
+	endif
+	button midrowx1, midrowy to midrowx2-10, midrowy + 25, "viewbutton", "View", "MainWindow" 
+	tooltip "viewbutton", "View this image in\nan external viewer."
+	button midrowx2, midrowy to winwidth - midrowx1, midrowy + 25, "savedefaultbutton", "Save defaults", "MainWindow" 
+	button bottomrowx1, bottomrowy to bottomrowx2-10, bottomrowy + 25, "savebutton", "Save", "MainWindow" 
+	tooltip "savebutton", "Save the currently displayed image,\noverwriting the input file."
+	button bottomrowx2, bottomrowy to winwidth - bottomrowx1, bottomrowy + 25, "saveasbutton", "Save As ...", "MainWindow" 	
+	tooltip "saveasbutton", "Save the currently displayed image\nto a new file. If this action is part\nof a sequence, the new file will be\npassed to the next command."
+	if sequence then
+		option set "savebutton", "enabled", 0
+		option set "saveasbutton", "enabled", 0
+		option set "viewbutton", "enabled", 0
+	endif
+	option set "savedefaultbutton", "enabled", 0
+	tooltip "savedefaultbutton", "This program does not\nhave defaults to save"
+end sub
+

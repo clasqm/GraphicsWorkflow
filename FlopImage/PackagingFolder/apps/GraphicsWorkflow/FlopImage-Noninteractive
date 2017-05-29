@@ -1,0 +1,5 @@
+#!/boot/system/bin/bash
+#echo flopimage
+mogrify -flop $1
+mimeset -F $1
+echo $1
