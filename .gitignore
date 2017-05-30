@@ -1,7 +1,7 @@
 PackagingFolder/**
 FlipImage/PackagingFolder/**
 FlopImage/PackagingFolder/**
-
+EmbossImage/PackagingFolder/**
 # Backup files #
 ######################
 *.bak

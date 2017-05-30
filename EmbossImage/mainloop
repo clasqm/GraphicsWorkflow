@@ -1,0 +1,85 @@
+
+//Yabadabbadoo notification
+########DO NOT RENAME THIS FILE!########
+//Yabadabbadoo needs it to function.
+//Of course, this does not apply if you are editing in the official yab IDE.
+
+//Main Message Loop
+dim msg$(1)
+while(not leavingLoop)
+	nCommands = token(message$, msg$(), "|")
+	for everyCommand = 1 to nCommands
+		if(DEBUG and msg$(everyCommand)<>"") print msg$(everyCommand)
+		switch(msg$(everyCommand))
+			case "_QuitRequested":
+			case "MainWindow:_QuitRequested":
+			case "MainWindow:File:Quit":
+				CloseWindow()
+				break
+			case "MainWindow:File:Open"
+				GetFilename()
+				DrawEmptyPreview()
+				DrawPreview(0)
+				break
+			case "MainWindow:File:Emboss the Image and Quit"
+			case "doitandquitbutton"
+				system("barberpole_embossimage &")
+				system("mogrify -emboss 100 " + TempFile$)
+				DrawPreview(sequence, TempFile$)
+				pause 1.5
+				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
+				system("mimeset -F '" + TheFile$ + "'")
+				CloseWindow()
+				break
+			case "MainWindow:File:Save"
+			case "savebutton"
+				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
+				system("mimeset -F " + TheFile$)
+				break
+			case "MainWindow:File:Save As ..."
+			case "saveasbutton"
+				TheFile$ = filepanel "Save-File", "Image to save?", ProjectBasePath$
+				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
+				system("mimeset -F " + TheFile$)
+				break
+			case "MainWindow:Edit:Emboss the Image"
+			case "doitbutton"
+				system("barberpole_embossimage &")
+				system("mogrify -emboss 100 " + TempFile$)
+				system("mimeset -F " + TempFile$)
+				DrawPreview(sequence, TempFile$)
+				option set "revertbutton", "enabled", 1
+				menu set "Edit", "Revert action", "enable", "MainWindow"
+				a = message send "application/x-vnd.barberpole_embossimage", "quit"
+				break
+			case "MainWindow:Edit:Revert action"
+			case "revertbutton"
+				system("cp -f '" + TheFile$ + "' " + TempFile$)
+				system ("mimeset - F " + TempFile$  )
+				DrawPreview(sequence, TempFile$)
+				option set "revertbutton", "enabled", 0
+				menu set "Edit", "Revert action", "disable", "MainWindow"
+				break
+			case "MainWindow:File:View"
+			case "viewbutton"
+				system("/boot/system/apps/ShowImage '" + TempFile$ + "' &")
+				break
+			case "MainWindow:Help:About":
+				Alert ProgramName$ + " " + ProgramVersion$ + "\n" + "by " + AuthorName$ +"\n\n" + ProgramBriefDescription$ + "\n" + ProgramLicense$ + "\n" + ProgramAcknowledgements$, "OK", "none"
+			default:
+				break
+		end switch
+		if instr(msg$(everyCommand), "Preview:_Dropped:") then
+			TheFile$ = mid$(msg$(everyCommand), 18)
+			DrawEmptyPreview()
+			if TestGraphic() then
+				system("cp -f '" + TheFile$ + "' " + TempFile$)
+				system ("mimeset - F " + TempFile$  )
+				DrawPreview(sequence, TempFile$)
+			endif
+		endif
+	next everyCommand
+wend
+
+CloseWindow()
+

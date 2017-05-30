@@ -1,5 +1,23 @@
-#!/boot/system/bin/bash
-#echo flopimage
-mogrify -flop $1
-mimeset -F $1
-echo $1
+#!yab
+
+#!yab
+
+doc FlopImage-Noninteractive
+doc .
+doc
+doc Michel Clasquin-Johnson, 2017, Public Domain
+
+import libclasqm_main
+
+if peek("argument")<>0 then 
+	TheFile$ = peek$("argument")
+else
+	exit
+endif
+
+system("mogrify -flop '" + TheFile$ + "'")
+system("mimeset -F '" + TheFile$ + "'")
+
+print "'" + TheFile$ + "'"
+
+exit

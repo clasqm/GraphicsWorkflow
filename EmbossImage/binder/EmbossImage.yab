@@ -11,10 +11,10 @@
 ##Fill in these fields with your own particulars.
 ##The variables will be used in the About Box and in naming the program.
  
-ProgramName$ = "FlipImage"
+ProgramName$ = "EmbossImage"
 AuthorName$ = "Michel Clasquin-Johnson"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "Flip images vertically."
+ProgramBriefDescription$ = "Apply Ebossing effect to  images"
 ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Pete Goodeve"
 
@@ -104,9 +104,10 @@ while(not leavingLoop)
 				DrawEmptyPreview()
 				DrawPreview(0)
 				break
-			case "MainWindow:File:Flip the Image and Quit"
+			case "MainWindow:File:Emboss the Image and Quit"
 			case "doitandquitbutton"
-				system("mogrify -flip " + TempFile$)
+				system("barberpole_embossimage &")
+				system("mogrify -emboss 100 " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
@@ -124,11 +125,23 @@ while(not leavingLoop)
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
 				system("mimeset -F " + TheFile$)
 				break
-			case "MainWindow:Edit:Flip the Image"
+			case "MainWindow:Edit:Emboss the Image"
 			case "doitbutton"
-				system("mogrify -flip " + TempFile$)
+				system("barberpole_embossimage &")
+				system("mogrify -emboss 100 " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawPreview(sequence, TempFile$)
+				option set "revertbutton", "enabled", 1
+				menu set "Edit", "Revert action", "enable", "MainWindow"
+				a = message send "application/x-vnd.barberpole_embossimage", "quit"
+				break
+			case "MainWindow:Edit:Revert action"
+			case "revertbutton"
+				system("cp -f '" + TheFile$ + "' " + TempFile$)
+				system ("mimeset - F " + TempFile$  )
+				DrawPreview(sequence, TempFile$)
+				option set "revertbutton", "enabled", 0
+				menu set "Edit", "Revert action", "disable", "MainWindow"
 				break
 			case "MainWindow:File:View"
 			case "viewbutton"
@@ -159,6 +172,7 @@ sub CloseWindow()
 	if window get "MainWindow", "exists" window close "MainWindow"
 	system("rm -f " + TempFile$)
 	print "'" + TheFile$ + "'"
+	a = message send "application/x-vnd.barberpole_embossimage", "quit"
 	exit
 end sub
 
@@ -246,10 +260,12 @@ sub MakeButtons(sequence)
 	bottomrowx2 = winwidth/2 + 10: midrowx2 = winwidth/2 + 10: toprowx2 = winwidth/2 + 10
 	if sequence then 
 		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitandquitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitandquitbutton", "Flip this image vertically,update the\npreview, save the file and quit."
+		tooltip "doitandquitbutton", "Emboss this image,update the\npreview, save the file and quit."
 	else
-		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitbutton", "Flip this image vertically and\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
+		button toprowx1, toprowy to toprowx2-10, toprowy + 25, "doitbutton", "DO IT!", "MainWindow" 
+		tooltip "doitbutton", "Emboss this image and then\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
+		button toprowx2, toprowy to winwidth - toprowx1, toprowy + 25, "revertbutton", "Revert","MainWindow" 
+		tooltip "revertbutton", "Revert changes."
 	endif
 	button midrowx1, midrowy to midrowx2-10, midrowy + 25, "viewbutton", "View", "MainWindow" 
 	tooltip "viewbutton", "View this image in\nan external viewer."
@@ -263,6 +279,7 @@ sub MakeButtons(sequence)
 		option set "saveasbutton", "enabled", 0
 		option set "viewbutton", "enabled", 0
 	endif
+	option set "revertbutton", "enabled", 0
 	option set "savedefaultbutton", "enabled", 0
 	tooltip "savedefaultbutton", "This program does not\nhave defaults to save"
 end sub
@@ -270,13 +287,15 @@ end sub
 sub MakeMenu(sequence)
 	//Create menu in MainWindow
 	if sequence then
-		menu "File", "Flip the Image and Quit", "Q", "MainWindow"
+		menu "File", "Emboss the Image and Quit", "Q", "MainWindow"
 	else
 		menu "File", "Quit", "Q", "MainWindow"
 		menu "File", "Open", "O", "MainWindow"
 		menu "File", "Save", "S", "MainWindow"
 		menu "File", "Save As ...", "", "MainWindow"
-		menu "Edit", "Flip the Image", "A", "MainWindow"
+		menu "Edit", "Emboss the Image", "A", "MainWindow"
+		menu "Edit", "Revert action", "U", "MainWindow"
+		menu set "Edit", "Revert action", "disable", "MainWindow"
 		menu "File", "View", "V", "MainWindow"
 	endif
 	menu "Help", "About", "", "MainWindow"

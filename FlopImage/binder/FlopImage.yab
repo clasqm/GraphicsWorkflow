@@ -162,14 +162,6 @@ sub CloseWindow()
 	end
 end sub
 
-sub DoIt()
-	//This should be used for any graphics-changing actions that take place
-	//BEFORE Saving. Perhaps as a preview
-	//But many ImageMagick actions can be done directly as a Save or SaveAs
-	//Keep in mind that in sequence mode an applet only has a do-it-and-save function
-	MakeBackup()
-end sub
-
 sub DrawEmptyPreview()
 	//fill preview box with grey so that if you load a picture
 	//with different dimensions, the old one does not 
@@ -245,16 +237,6 @@ sub GetGeometry$()
 	for f = 1 to num
 		if instr(w$(f), "geom=") return mid$(w$(f), 6)
 	next f
-end sub
-
-sub MakeBackup()
-	local BackupFile$
-	//make a backup copy before you do anything else
-	//comment this out if you don't want it
-	//Preview actions can be carried out on the backup
-	//before you commit to save
-	system("cp -f  '" + TheFile$ + "' " + TempDir$())
-	BackupFile$ = TempDir$() + "/" + ProjectName$
 end sub
 
 sub MakeButtons(sequence)
