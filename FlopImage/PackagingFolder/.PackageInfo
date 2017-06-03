@@ -6,6 +6,8 @@ summary			"Flip images horizontally"
 Description			"A small applet to flip images horizontally and save the resulting image using ImageMagick.
 
 Planned to be part of a larger graphics workflow application, but can be used standalone.
+
+Menu position: Applications | Graphics
 "
 
 packager			"Michel Clasquin-Johnson <clasqm@mail.com>"
@@ -24,3 +26,9 @@ requires {
 					libclasqm
 }
 
+URLs {
+					http://clasquin-johnson.co.za/michel/haiku
+}
+source-urls {
+					https://github.com/clasqm/GraphicsWorkflow
+}
