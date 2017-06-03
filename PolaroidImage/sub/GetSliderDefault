@@ -1,0 +1,14 @@
+sub GetSliderDefault()
+	local slant$, slant,handle
+	if FileExists(SettingsFile$) then
+		handle = open(SettingsFile$,"r")
+		input #handle slant$
+		slant = val(slant$)
+		close #handle
+	else
+		slant = 45
+	endif
+	
+	return slant
+end sub
+

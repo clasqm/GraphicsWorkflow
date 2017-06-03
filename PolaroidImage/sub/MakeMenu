@@ -1,0 +1,17 @@
+sub MakeMenu(sequence)
+	//Create menu in MainWindow
+	if sequence then
+		menu "File", "Polaroid the Image and Quit", "Q", "MainWindow"
+	else
+		menu "File", "Quit", "Q", "MainWindow"
+		menu "File", "Open", "O", "MainWindow"
+		menu "File", "Save", "S", "MainWindow"
+		menu "File", "Save As ...", "", "MainWindow"
+		menu "Edit", "Polaroid the Image", "A", "MainWindow"
+		menu "Edit", "Revert action", "", "MainWindow"
+		menu "Edit", "Save defaults", "", "MainWindow"
+		menu "File", "View", "V", "MainWindow"
+	endif
+	menu "Help", "About", "", "MainWindow"
+end sub
+
