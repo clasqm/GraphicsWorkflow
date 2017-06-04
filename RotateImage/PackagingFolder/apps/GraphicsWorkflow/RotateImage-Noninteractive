@@ -1,0 +1,36 @@
+#!yab
+
+doc RotateImage-Noninteractive
+doc .
+doc Michel Clasquin-Johnson, 2017, Public Domain
+doc .
+doc grabs default established with the GUI version, 
+doc otherwise defaults to 45 degrees.
+
+import libclasqm_main
+SettingsFile$="/boot/home/config/settings/rotateimage.settting"
+
+if peek("argument")<>0 then 
+	TheFile$ = peek$("argument")
+else
+	exit
+endif
+
+system("mogrify -background Transparent -rotate " + GetSliderDefault$() + " '" + TheFile$ + "'")
+system("mimeset -F '" + TheFile$ + "'")
+
+print "'" + TheFile$ + "'"
+
+exit
+
+sub GetSliderDefault$()
+	local slant$, slant,handle
+	if FileExists(SettingsFile$) then
+		handle = open(SettingsFile$,"r")
+		input #handle slant$
+		close #handle
+	else
+		slant = 45
+	endif
+	return slant$
+end sub

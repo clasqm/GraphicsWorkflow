@@ -5,10 +5,10 @@ sub MakeButtons(sequence)
 	bottomrowx2 = winwidth/2 + 10: midrowx2 = winwidth/2 + 10: toprowx2 = winwidth/2 + 10
 	if sequence then 
 		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitandquitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitandquitbutton", "Polaroid this image,update the\npreview, save the file and quit."
+		tooltip "doitandquitbutton", "Rotate this image,update the\npreview, save the file and quit."
 	else
 		button toprowx1, toprowy to toprowx2-10, toprowy + 25, "doitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitbutton", "Polaroid this image and then\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
+		tooltip "doitbutton", "Rotate this image and then\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
 		button toprowx2, toprowy to winwidth - toprowx1, toprowy + 25, "revertbutton", "Revert","MainWindow" 
 		tooltip "revertbutton", "Revert changes."
 	endif

@@ -1,0 +1,35 @@
+name				rotateimage
+version				0.1-1
+architecture			x86_gcc2
+
+summary			"Rotate images"
+Description			"A small applet to rotate an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type.
+
+The non-interactive script will grab the default saved from the GUI version. If this does not exist, it defaults to 45 degrees rotation.
+
+Planned to be part of a larger graphics workflow application, but can be used standalone.
+
+Menu position: Applications | Graphics
+"
+
+packager			"Michel Clasquin-Johnson <clasqm@mail.com>"
+vendor				"clasqm"
+copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
+licenses				"Public Domain"
+provides {
+					rotateimage = 0.1-1
+}
+requires {
+					yab
+					imagemagick
+					filedate
+					filesize
+					imagsize
+					libclasqm
+}
+URLs {
+					http://clasquin-johnson.co.za/michel/haiku
+}
+source-urls {
+					https://github.com/clasqm/GraphicsWorkflow
+}
