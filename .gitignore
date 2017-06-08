@@ -5,6 +5,8 @@ EmbossImage/PackagingFolder/**
 NegateImage/PackagingFolder/**
 PolaroidImage/PackagingFolder/**
 AddBorderToImage/PackagingFolder/**
+AddSunkenBorderToImage/PackagingFolder/**
+AddRaisedBorderToImage/PackagingFolder/**
 
 # Backup files #
 ######################
