@@ -1,0 +1,39 @@
+#!yab
+
+doc AddBorderToImage-Noninteractive
+doc .
+doc Michel Clasquin-Johnson, 2017, Public Domain
+doc .
+doc grabs default established with the GUI version, 
+doc otherwise defaults to 20 pixels in black.
+
+import libclasqm_main
+SettingsFile$="/boot/home/config/settings/addbordertoimage.settting"
+
+if peek("argument")<>0 then 
+	TheFile$ = peek$("argument")
+else
+	exit
+endif
+
+system("mogrify -border " + str$(GetSliderDefault()) + "x" + str$(GetSliderDefault()) + "  -bordercolor " + bordercolor$ + " " + TheFile$)
+system("mimeset -F '" + TheFile$ + "'")
+
+print "'" + TheFile$ + "'"
+
+exit
+
+sub GetSliderDefault()
+	local thickness$, thickness,handle
+	if FileExists(SettingsFile$) then
+		handle = open(SettingsFile$,"r")
+		input #handle thickness$
+		thickness = val(thickness$)
+		input #handle bordercolor$
+		close #handle
+	else
+		thickness = 20
+		bordercolor$= "black"
+	endif
+	return thickness
+end sub

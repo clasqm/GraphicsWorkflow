@@ -1,11 +1,13 @@
-name				rotateimage
-version				0.1-2
+name				addbordertoimage
+version				0.1-1
 architecture			x86_gcc2
 
-summary			"Rotate images"
-Description			"A small applet to rotate an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type.
+summary			"Add a border to images"
+Description			"A small applet to add a coloured border to an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type.
 
-The non-interactive script will grab the default saved from the GUI version. If this does not exist, it defaults to 45 degrees rotation.
+The non-interactive script will grab the default saved from the GUI version. If this does not exist, it defaults to a black border 20 pixels thick.
+
+Currently the preview window may cut off the bottom of the graphic, but you can always use the View button.
 
 Planned to be part of a larger graphics workflow application, but can be used standalone.
 
@@ -17,7 +19,7 @@ vendor				"clasqm"
 copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
 licenses				"Public Domain"
 provides {
-					rotateimage = 0.1-2
+					addbordertoimage = 0.1-1
 }
 requires {
 					yab
@@ -33,3 +35,4 @@ URLs {
 source-urls {
 					https://github.com/clasqm/GraphicsWorkflow
 }
+

@@ -1,0 +1,33 @@
+sub OpenWindow(sequence)
+	//Setup the main window here
+	GetCoordinates()
+	window open startx,starty to endx,endy, "MainWindow", ProgramName$
+	window set "MainWindow", "flags", "not-resizable"
+	window set "MainWindow", "flags", "not-zoomable"
+	window set "MainWindow", "flags", "Accept-First-Click"
+	if sequence window set "MainWindow", "look", "modal"
+	MakeMenu(sequence)
+	text 0,23 to winwidth, 36, "PreviewText", "Image Preview", "MainWindow"
+	text set "PreviewText", "align-center"
+	draw rect 4,39 to winwidth - 4, winwidth - 10 + 41, "MainWindow"
+	view 5, 40 to winwidth - 5, winwidth - 10 + 40, "Preview", "MainWindow"
+	if not(sequence) view dropzone "Preview"
+	DrawEmptyPreview()
+	DrawPreview(sequence, TheFile$)
+	slider 5,winwidth + 35 to winwidth - 5, winwidth + 55, "ThicknessWidget", "Thickness", 1, 100, "triangle", "MainWindow"
+	slider label "ThicknessWidget", "0", "100"
+	slider set "ThicknessWidget", "bottom", 10
+	slider set "ThicknessWidget", GetSliderDefault()
+//	colorcontrol 2, winwidth + 95, "ColorWidget", "MainWindow"
+	radiobutton 5, winwidth + 95, "ColorChoiceblack", "Black", (bordercolor$= "black"), "MainWindow"
+	radiobutton 5, winwidth + 115, "ColorChoicewhite", "White", (bordercolor$= "white"), "MainWindow"
+	radiobutton 5, winwidth + 135, "ColorChoicegrey", "Grey", (bordercolor$= "grey"), "MainWindow"
+	radiobutton int(winwidth/3 + 5), winwidth + 95, "ColorChoiceblue", "Blue", (bordercolor$= "blue"), "MainWindow"
+	radiobutton int(winwidth/3 + 5), winwidth + 115, "ColorChoicegreen", "Green", (bordercolor$= "green"), "MainWindow"
+	radiobutton int(winwidth/3 + 5), winwidth + 135, "ColorChoicered", "Red", (bordercolor$= "red"), "MainWindow"
+	radiobutton int(winwidth/3 * 2 + 5), winwidth + 95, "ColorChoiceyellow", "Yellow", (bordercolor$= "yellow"), "MainWindow"
+	radiobutton int(winwidth/3 * 2 + 5), winwidth + 115, "ColorChoicebrown", "Brown", (bordercolor$= "brown"), "MainWindow"
+	radiobutton int(winwidth/3 * 2 + 5), winwidth + 135, "ColorChoicepink", "Pink", (bordercolor$= "pink"), "MainWindow"
+	MakeButtons(sequence)
+end sub
+

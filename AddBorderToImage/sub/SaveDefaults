@@ -1,0 +1,11 @@
+sub SaveDefaults()
+	local thickness$, thickness,handle
+		handle = open(SettingsFile$,"w")
+		thickness = slider get "ThicknessWidget"
+		thickness$ = str$(thickness)
+		print #handle thickness$
+		print #handle bordercolor$
+		close #handle
+		alert "Default saved as " + thickness$ + "pixels in " + bordercolor$ + ".", "Ok", "info"
+end sub
+
