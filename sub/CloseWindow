@@ -1,5 +1,6 @@
 sub CloseWindow()
 	//Close down the main window
+	system("rm -f " + AppletsFile$ + " &")
 	window close "MainWindow"
 end sub
 

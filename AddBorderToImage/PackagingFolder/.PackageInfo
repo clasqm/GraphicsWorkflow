@@ -3,7 +3,7 @@ version				0.1-1
 architecture			x86_gcc2
 
 summary			"Add a border to images"
-Description			"A small applet to add a coloured border to an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type.
+Description			"A small applet to add a coloured border to an image and save the resulting image, using ImageMagick.
 
 The non-interactive script will grab the default saved from the GUI version. If this does not exist, it defaults to a black border 20 pixels thick.
 

@@ -1,5 +1,7 @@
 #!/bin/sh
 cd /boot/home/projects/GraphicsWorkflow/FlopImage/PackagingFolder
+addattr GraphicsWorkshop:Info "A small applet to flip images horizontally and save the resulting image using ImageMagick. Interactive." ./apps/GraphicsWorkflow/FlopImage
+addattr GraphicsWorkshop:Info "A script to flip images horizontally and save the resulting image using ImageMagick. Non-Interactive." ./apps/GraphicsWorkflow/FlopImage-Noninteractive
 package create -b flopimage_0.1-1_gcc2.hpkg
 sleep 0.5
 package add flopimage_0.1-1_gcc2.hpkg data apps bin

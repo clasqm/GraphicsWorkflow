@@ -1,0 +1,14 @@
+sub ScanDirForApplets(dir$, mode$)
+	local result$, handle
+	if FileExists(dir$) and FileorDir(dir$) then
+		result$ = system$("ls -1 " + dir$)
+		handle = open(AppletsFile$, mode$)
+		if handle then
+			print #handle result$
+			close handle
+		endif
+	else
+		return
+	endif
+end sub
+

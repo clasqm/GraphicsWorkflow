@@ -1,0 +1,134 @@
+#!/bin/env yab
+################################
+############# Prologue #############
+################################
+
+import libclasqm_main
+
+//Yabadabbadoo notification
+########DO NOT RENAME THIS FILE!########
+//Yabadabbadoo needs it to function.
+//Of course, this does not apply if you are editing in the official yab IDE.
+ 
+##Fill in these fields with your own particulars.
+##The variables will be used in the About Box and in naming the program.
+ 
+ProgramName$ = "GraphicsWorkflow"
+AuthorName$ = "Michel Clasquin-Johnson"
+ProgramVersion$ = "V0.1"
+ProgramBriefDescription$ = "This app lets you string together a series of separate scripts and applets and apply the sequence to an image"
+ProgramLicense$ = "Public Domain"
+ProgramAcknowledgements$ ="With thanks to Pete Goodeve for giving me the idea for this app."
+ 
+//*************************
+//*****Global Variables****
+//*************************
+ 
+## Technically, yab does not require you to declare global variables,
+##It just is a really, really good idea to do it anyway.
+// set DEBUG = 1 to print out all messages on the console
+DEBUG = 1
+//change this to DEBUG = 0 when you are ready to bind the program for distribution
+systemdir$ = "/boot/system/apps/GraphicsWorkflow"
+userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
+nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
+developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
+AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
+AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+
+##########################
+######Preliminary Commands#####
+##########################
+
+## Commands to run before the Main Loop come here.
+## e.g. setting up a window with a menu.
+ 
+GetApplets() 
+ 
+OpenWindow()
+
+ 
+ 
+ 
+#######End of Prologue#######
+
+
+//Yabadabbadoo notification
+########DO NOT RENAME THIS FILE!########
+//Yabadabbadoo needs it to function.
+//Of course, this does not apply if you are editing in the official yab IDE.
+
+//Main Message Loop
+dim msg$(1)
+while(not leavingLoop)
+	nCommands = token(message$, msg$(), "|")
+	for everyCommand = 1 to nCommands
+		if(DEBUG and msg$(everyCommand)<>"") print msg$(everyCommand)
+		switch(msg$(everyCommand))
+			case "_QuitRequested":
+			case "MainWindow:_QuitRequested":
+			case "MainWindow:File:Quit":
+				leavingLoop = true
+				break
+			case "MainWindow:Help:About":
+				Alert ProgramName$ + " " + ProgramVersion$ + "\n" + "by " + AuthorName$ +"\n\n" + ProgramBriefDescription$ + "\n" + ProgramLicense$ + "\n" + ProgramAcknowledgements$, "OK", "none"
+			default:
+				break
+		end switch
+	next everyCommand
+wend
+
+
+CloseWindow()
+
+
+end
+
+
+sub CloseWindow()
+	//Close down the main window
+	system("rm -f " + AppletsFile$ + " &")
+	window close "MainWindow"
+end sub
+
+sub GetApplets()
+	ScanDirForApplets(developerdir$, "w")
+	ScanDirForApplets(systemdir$, "a")
+	ScanDirForApplets(userdir$, "a")
+	ScanDirForApplets(nonpackageddir$, "a")
+	system("sed '/^$/d' " + AppletsFile$ +" > " + AppletsTempFile$) //remove blank lines
+	system("sort -u " + AppletsTempFile$  + " > " + AppletsFile$) //sort and remove duplicates
+	system("rm -f " + AppletsTempFile$ + " &")
+end sub
+
+sub MakeMenu()
+	//Create menu in MainWindow
+	menu "File", "Quit", "Q", "MainWindow"
+	menu "Help", "About", "", "MainWindow"
+end sub
+
+sub OpenWindow()
+	//Setup the main window here
+	window open 100,100 to 600,500, "MainWindow", "Main Window"
+	MakeMenu()
+end sub
+
+sub ScanDirForApplets(dir$, mode$)
+	local result$, handle
+	if FileExists(dir$) and FileorDir(dir$) then
+		result$ = system$("ls -1 " + dir$)
+		handle = open(AppletsFile$, mode$)
+		if handle then
+			print #handle result$
+			close handle
+		endif
+	else
+		return
+	endif
+end sub
+
+########################################
+###DATA statements, if any, come here###
+########################################
+
+

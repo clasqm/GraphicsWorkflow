@@ -1,0 +1,10 @@
+sub GetApplets()
+	ScanDirForApplets(developerdir$, "w")
+	ScanDirForApplets(systemdir$, "a")
+	ScanDirForApplets(userdir$, "a")
+	ScanDirForApplets(nonpackageddir$, "a")
+	system("sed '/^$/d' " + AppletsFile$ +" > " + AppletsTempFile$) //remove blank lines
+	system("sort -u " + AppletsTempFile$  + " > " + AppletsFile$) //sort and remove duplicates
+	system("rm -f " + AppletsTempFile$ + " &")
+end sub
+
