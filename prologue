@@ -14,11 +14,11 @@ import libclasqm_main
 ##The variables will be used in the About Box and in naming the program.
  
 ProgramName$ = "GraphicsWorkflow"
-AuthorName$ = "Michel Clasquin-Johnson"
+AuthorName$ = "Michel Clasquin-Johnson <clasqm@gmail.com>"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "This app lets you string together a series of separate scripts and applets and apply the sequence to an image"
-ProgramLicense$ = "Public Domain"
-ProgramAcknowledgements$ ="With thanks to Pete Goodeve for giving me the idea for this app."
+ProgramBriefDescription$ = "This app lets you string together a series of separate scripts and applets and apply the sequence to an image."
+ProgramLicense$ = "\nPublic Domain Software."
+ProgramAcknowledgements$ ="\nWith thanks to Pete Goodeve for giving me the idea for this app."
  
 //*************************
 //*****Global Variables****
@@ -35,6 +35,8 @@ nonpackageddir$ = "/boot/home/config/non-packaged/apps"
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+MWWidth = 450
+MWHeight = 600
 
 ##########################
 ######Preliminary Commands#####

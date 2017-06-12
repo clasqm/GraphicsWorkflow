@@ -1,6 +1,10 @@
 sub MakeMenu()
 	//Create menu in MainWindow
+	menu "File", "Save", "S", "MainWindow"
+	menu "File", "Open", "O", "MainWindow"
 	menu "File", "Quit", "Q", "MainWindow"
+	menu "Sequence", "Clear Sequence", "C", "MainWindow"
+	menu "Sequence", "Generate Sequence", "G", "MainWindow"
 	menu "Help", "About", "", "MainWindow"
 end sub
 

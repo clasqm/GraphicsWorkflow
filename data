@@ -2,4 +2,15 @@
 ###DATA statements, if any, come here###
 ########################################
 
+label installables
+data "AddBorderToImage"
+data "AddRaisedBorderToImage"
+data "AddSunkenBorderToImage"
+data "EmbossImage"
+data "FlipImage"
+data "FlopImage"
+data "NegateImage"
+data "PolaroidImage"
+data "RotateImage"
+data "end_of_data"
 

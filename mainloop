@@ -23,11 +23,5 @@ while(not leavingLoop)
 		end switch
 	next everyCommand
 wend
-
-
 CloseWindow()
-
-
-end
-
 

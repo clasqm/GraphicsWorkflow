@@ -14,11 +14,11 @@ import libclasqm_main
 ##The variables will be used in the About Box and in naming the program.
  
 ProgramName$ = "GraphicsWorkflow"
-AuthorName$ = "Michel Clasquin-Johnson"
+AuthorName$ = "Michel Clasquin-Johnson <clasqm@gmail.com>"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "This app lets you string together a series of separate scripts and applets and apply the sequence to an image"
-ProgramLicense$ = "Public Domain"
-ProgramAcknowledgements$ ="With thanks to Pete Goodeve for giving me the idea for this app."
+ProgramBriefDescription$ = "This app lets you string together a series of separate scripts and applets and apply the sequence to an image."
+ProgramLicense$ = "\nPublic Domain Software."
+ProgramAcknowledgements$ ="\nWith thanks to Pete Goodeve for giving me the idea for this app."
  
 //*************************
 //*****Global Variables****
@@ -35,6 +35,8 @@ nonpackageddir$ = "/boot/home/config/non-packaged/apps"
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+MWWidth = 450
+MWHeight = 600
 
 ##########################
 ######Preliminary Commands#####
@@ -77,18 +79,39 @@ while(not leavingLoop)
 		end switch
 	next everyCommand
 wend
-
-
 CloseWindow()
-
-
-end
-
 
 sub CloseWindow()
 	//Close down the main window
 	system("rm -f " + AppletsFile$ + " &")
-	window close "MainWindow"
+	if window get "MainWindow", "exists" window close "MainWindow"
+	exit
+end sub
+
+sub DrawEmptyPreview()
+	//fill preview box with grey so that if you load a picture
+	//with different dimensions, the old one does not 
+	//bleed through on the edges
+	local viewheight, viewwidth
+	viewheight = view get "Preview", "height"
+	viewwidth = view get "Preview", "width"
+	draw set "highcolor", 216,216,216, "Preview"
+	draw rect 0,0 to viewwidth, viewheight, "Preview"
+	draw set "highcolor", 0,0,0, "Preview"
+end sub
+
+sub DrawPreview(sequence)
+	local viewheight, viewwidth, loaderror, tip$
+	viewheight = view get "Preview", "height"
+	viewwidth = view get "Preview", "width"
+	loaderror = Draw image 0,0 to viewwidth, -1, TheFile$, "Preview"
+	if loaderror alert "An error has occurred. This graphic cannot be displayed", "Ok", "info"
+	tip$ = TheFile$ + "\n"
+	tip$ = tip$ + "Last modified: " + left$(system$("filedate " + TheFile$), 9) + "\n"
+	tip$ = tip$ + "File size:  " + str$(val(system$("filesize " + TheFile$))/1024) + " Kilobytes\n" 
+	tip$ = tip$ + "Dimensions: " + GetGeometry$()
+	if not(sequence) tip$ = tip$ + "\nDrop a file here to start on a new image."
+	tooltip "Preview", tip$
 end sub
 
 sub GetApplets()
@@ -101,16 +124,64 @@ sub GetApplets()
 	system("rm -f " + AppletsTempFile$ + " &")
 end sub
 
+sub GetWindowDimension(dimension$)
+	switch lower$(left$(dimension$,1))
+		case "w"
+			return window get "MainWindow", "Width"
+			break
+		case "h"
+			return window get "MainWindow", "height"
+			break
+	end switch
+end sub
+
 sub MakeMenu()
 	//Create menu in MainWindow
+	menu "File", "Save", "S", "MainWindow"
+	menu "File", "Open", "O", "MainWindow"
 	menu "File", "Quit", "Q", "MainWindow"
+	menu "Sequence", "Clear Sequence", "C", "MainWindow"
+	menu "Sequence", "Generate Sequence", "G", "MainWindow"
 	menu "Help", "About", "", "MainWindow"
 end sub
 
 sub OpenWindow()
 	//Setup the main window here
-	window open 100,100 to 600,500, "MainWindow", "Main Window"
+	local examplewidth, exampleheight, windowwidth, windowheight, examplex, exampley
+	window open 10,25 to 10 + MWWidth, MWHeight -20, "MainWindow", ProgramName$
+	window set "MainWindow", "flags", "not-resizable"
+	window set "MainWindow", "flags", "not-zoomable"
+	windowwidth = GetWindowDimension("w")
+	windowheight = GetWindowDimension("h")
 	MakeMenu()
+	//Installed applets
+	text 5,25, "InstalledText", "Installed:", "MainWindow"
+	listbox 5,40 to windowwidth /2 -5, windowheight / 3 * 2, "InstalledList", 1, "MainWindow"
+	//installable applets
+	text 5,windowheight / 3 * 2 + 10, "InstallableText", "Installable:", "MainWindow"
+	listbox 5,windowheight / 3 * 2 + 25 to windowwidth /2 -5, windowheight -5, "InstallableList", 1, "MainWindow"
+	//Sequence
+	text windowwidth/2 + 5,25, "SequenceText", "Sequence:", "MainWindow"
+	listbox windowwidth/2 + 5,40 to windowwidth- 5, windowheight / 2, "SequenceList", 1, "MainWindow"
+	//Info
+	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
+	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
+	//Example
+	text windowwidth/2 + 5,windowheight / 3 * 2 + 10, "ExampleText", "Example:", "MainWindow"
+	examplewidth = windowwidth/2 - 10
+	exampleheight = windowheight - (windowheight / 3 * 2) - 35
+	if examplewidth > exampleheight then
+		examplewidth = exampleheight 
+	elseif examplewidth < exampleheight 
+		exampleheight = examplewidth
+	endif
+	examplewidth = int(examplewidth)
+	exampleheight = int(exampleheight)
+	examplex = int(windowwidth/2+ ((windowwidth/2 - examplewidth)/2))
+	exampley = int(windowheight / 3 * 2 + 40 +((windowheight - (windowheight/3 * 2 + 40) - exampleheight)/2)) -5
+	draw rect examplex -1, exampley -1 to examplex + examplewidth + 1, exampley + exampleheight + 1, "MainWindow"
+	view examplex, exampley to examplex + examplewidth, exampley + exampleheight, "Preview", "MainWindow"
+	DrawEmptyPreview()
 end sub
 
 sub ScanDirForApplets(dir$, mode$)
@@ -131,4 +202,15 @@ end sub
 ###DATA statements, if any, come here###
 ########################################
 
+label installables
+data "AddBorderToImage"
+data "AddRaisedBorderToImage"
+data "AddSunkenBorderToImage"
+data "EmbossImage"
+data "FlipImage"
+data "FlopImage"
+data "NegateImage"
+data "PolaroidImage"
+data "RotateImage"
+data "end_of_data"
 

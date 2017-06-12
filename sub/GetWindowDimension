@@ -1,0 +1,11 @@
+sub GetWindowDimension(dimension$)
+	switch lower$(left$(dimension$,1))
+		case "w"
+			return window get "MainWindow", "Width"
+			break
+		case "h"
+			return window get "MainWindow", "height"
+			break
+	end switch
+end sub
+

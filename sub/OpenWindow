@@ -1,6 +1,39 @@
 sub OpenWindow()
 	//Setup the main window here
-	window open 100,100 to 600,500, "MainWindow", "Main Window"
+	local examplewidth, exampleheight, windowwidth, windowheight, examplex, exampley
+	window open 10,25 to 10 + MWWidth, MWHeight -20, "MainWindow", ProgramName$
+	window set "MainWindow", "flags", "not-resizable"
+	window set "MainWindow", "flags", "not-zoomable"
+	windowwidth = GetWindowDimension("w")
+	windowheight = GetWindowDimension("h")
 	MakeMenu()
+	//Installed applets
+	text 5,25, "InstalledText", "Installed:", "MainWindow"
+	listbox 5,40 to windowwidth /2 -5, windowheight / 3 * 2, "InstalledList", 1, "MainWindow"
+	//installable applets
+	text 5,windowheight / 3 * 2 + 10, "InstallableText", "Installable:", "MainWindow"
+	listbox 5,windowheight / 3 * 2 + 25 to windowwidth /2 -5, windowheight -5, "InstallableList", 1, "MainWindow"
+	//Sequence
+	text windowwidth/2 + 5,25, "SequenceText", "Sequence:", "MainWindow"
+	listbox windowwidth/2 + 5,40 to windowwidth- 5, windowheight / 2, "SequenceList", 1, "MainWindow"
+	//Info
+	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
+	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
+	//Example
+	text windowwidth/2 + 5,windowheight / 3 * 2 + 10, "ExampleText", "Example:", "MainWindow"
+	examplewidth = windowwidth/2 - 10
+	exampleheight = windowheight - (windowheight / 3 * 2) - 35
+	if examplewidth > exampleheight then
+		examplewidth = exampleheight 
+	elseif examplewidth < exampleheight 
+		exampleheight = examplewidth
+	endif
+	examplewidth = int(examplewidth)
+	exampleheight = int(exampleheight)
+	examplex = int(windowwidth/2+ ((windowwidth/2 - examplewidth)/2))
+	exampley = int(windowheight / 3 * 2 + 40 +((windowheight - (windowheight/3 * 2 + 40) - exampleheight)/2)) -5
+	draw rect examplex -1, exampley -1 to examplex + examplewidth + 1, exampley + exampleheight + 1, "MainWindow"
+	view examplex, exampley to examplex + examplewidth, exampley + exampleheight, "Preview", "MainWindow"
+	DrawEmptyPreview()
 end sub
 
