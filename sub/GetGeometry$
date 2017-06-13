@@ -1,0 +1,10 @@
+sub GetGeometry$(TheFile$)
+	//get width and height data from imagsize utility
+	local w$(6), num,TheString$
+	TheString$ = system$("imagsize '" + TheFile$ +"'")
+	num = token(TheString$, w$())
+	for f = 1 to num
+		if instr(w$(f), "geom=") return mid$(w$(f), 6)
+	next f
+end sub
+

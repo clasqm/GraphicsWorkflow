@@ -6,5 +6,7 @@ sub GetApplets()
 	system("sed '/^$/d' " + AppletsFile$ +" > " + AppletsTempFile$) //remove blank lines
 	system("sort -u " + AppletsTempFile$  + " > " + AppletsFile$) //sort and remove duplicates
 	system("rm -f " + AppletsTempFile$ + " &")
+	//also get graphics
+	system("query *.jpg | grep /data/artwork/GraphicsWorkflow/ >" + PicFile$ + " &")
 end sub
 

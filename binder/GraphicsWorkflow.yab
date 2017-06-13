@@ -33,10 +33,19 @@ systemdir$ = "/boot/system/apps/GraphicsWorkflow"
 userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
 nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
-AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
+AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content"
+PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
 MWWidth = 450
 MWHeight = 600
+
+//Test if running in dev environment - if so set default pic there
+//else set default pic to package format 
+if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
+	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
+else
+	DefaultPic$ = "../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
+endif
 
 ##########################
 ######Preliminary Commands#####
@@ -84,6 +93,7 @@ CloseWindow()
 sub CloseWindow()
 	//Close down the main window
 	system("rm -f " + AppletsFile$ + " &")
+	system("rm -f " + PicFile$ + " &")
 	if window get "MainWindow", "exists" window close "MainWindow"
 	exit
 end sub
@@ -100,18 +110,29 @@ sub DrawEmptyPreview()
 	draw set "highcolor", 0,0,0, "Preview"
 end sub
 
-sub DrawPreview(sequence)
-	local viewheight, viewwidth, loaderror, tip$
+sub DrawPreview(TheFile$)
+	local viewheight, viewwidth, loaderror, tip$, tokennum, w$(1)
 	viewheight = view get "Preview", "height"
 	viewwidth = view get "Preview", "width"
 	loaderror = Draw image 0,0 to viewwidth, -1, TheFile$, "Preview"
 	if loaderror alert "An error has occurred. This graphic cannot be displayed", "Ok", "info"
-	tip$ = TheFile$ + "\n"
+	tokennum = token(TheFile$, w$(), "/")
+	tip$ = w$(tokennum) + "\n"
 	tip$ = tip$ + "Last modified: " + left$(system$("filedate " + TheFile$), 9) + "\n"
 	tip$ = tip$ + "File size:  " + str$(val(system$("filesize " + TheFile$))/1024) + " Kilobytes\n" 
-	tip$ = tip$ + "Dimensions: " + GetGeometry$()
-	if not(sequence) tip$ = tip$ + "\nDrop a file here to start on a new image."
+	tip$ = tip$ + "Dimensions: " + GetGeometry$(TheFile$)
 	tooltip "Preview", tip$
+end sub
+
+sub FillInstalledList()
+	local r, item$
+	listbox clear "InstalledList"
+	r = open(AppletsFile$, "r")
+	while(not(EOF(r)))
+		input #r item$
+		if item$ <> "" listbox add "InstalledList",item$
+	wend 
+	close r
 end sub
 
 sub GetApplets()
@@ -122,6 +143,18 @@ sub GetApplets()
 	system("sed '/^$/d' " + AppletsFile$ +" > " + AppletsTempFile$) //remove blank lines
 	system("sort -u " + AppletsTempFile$  + " > " + AppletsFile$) //sort and remove duplicates
 	system("rm -f " + AppletsTempFile$ + " &")
+	//also get graphics
+	system("query *.jpg | grep /data/artwork/GraphicsWorkflow/ >" + PicFile$ + " &")
+end sub
+
+sub GetGeometry$(TheFile$)
+	//get width and height data from imagsize utility
+	local w$(6), num,TheString$
+	TheString$ = system$("imagsize '" + TheFile$ +"'")
+	num = token(TheString$, w$())
+	for f = 1 to num
+		if instr(w$(f), "geom=") return mid$(w$(f), 6)
+	next f
 end sub
 
 sub GetWindowDimension(dimension$)
@@ -166,6 +199,7 @@ sub OpenWindow()
 	//Info
 	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
 	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
+	textedit set "InfoBox", "editable", false
 	//Example
 	text windowwidth/2 + 5,windowheight / 3 * 2 + 10, "ExampleText", "Example:", "MainWindow"
 	examplewidth = windowwidth/2 - 10
@@ -182,6 +216,8 @@ sub OpenWindow()
 	draw rect examplex -1, exampley -1 to examplex + examplewidth + 1, exampley + exampleheight + 1, "MainWindow"
 	view examplex, exampley to examplex + examplewidth, exampley + exampleheight, "Preview", "MainWindow"
 	DrawEmptyPreview()
+	DrawPreview(DefaultPic$)
+	FillInstalledList()
 end sub
 
 sub ScanDirForApplets(dir$, mode$)

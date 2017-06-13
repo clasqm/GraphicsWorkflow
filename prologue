@@ -33,10 +33,19 @@ systemdir$ = "/boot/system/apps/GraphicsWorkflow"
 userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
 nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
-AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
+AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content"
+PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
 MWWidth = 450
 MWHeight = 600
+
+//Test if running in dev environment - if so set default pic there
+//else set default pic to package format 
+if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
+	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
+else
+	DefaultPic$ = "../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
+endif
 
 ##########################
 ######Preliminary Commands#####

@@ -19,6 +19,7 @@ sub OpenWindow()
 	//Info
 	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
 	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
+	textedit set "InfoBox", "editable", false
 	//Example
 	text windowwidth/2 + 5,windowheight / 3 * 2 + 10, "ExampleText", "Example:", "MainWindow"
 	examplewidth = windowwidth/2 - 10
@@ -35,5 +36,7 @@ sub OpenWindow()
 	draw rect examplex -1, exampley -1 to examplex + examplewidth + 1, exampley + exampleheight + 1, "MainWindow"
 	view examplex, exampley to examplex + examplewidth, exampley + exampleheight, "Preview", "MainWindow"
 	DrawEmptyPreview()
+	DrawPreview(DefaultPic$)
+	FillInstalledList()
 end sub
 

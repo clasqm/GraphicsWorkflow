@@ -1,0 +1,11 @@
+sub FillInstalledList()
+	local r, item$
+	listbox clear "InstalledList"
+	r = open(AppletsFile$, "r")
+	while(not(EOF(r)))
+		input #r item$
+		if item$ <> "" listbox add "InstalledList",item$
+	wend 
+	close r
+end sub
+
