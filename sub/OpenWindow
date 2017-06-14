@@ -38,5 +38,7 @@ sub OpenWindow()
 	DrawEmptyPreview()
 	DrawPreview(DefaultPic$)
 	FillInstalledList()
+	FillInstallableList()
+	CheckConnection()
 end sub
 

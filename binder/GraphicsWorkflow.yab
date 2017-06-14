@@ -33,19 +33,17 @@ systemdir$ = "/boot/system/apps/GraphicsWorkflow"
 userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
 nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
-AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content"
-PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
+AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
-MWWidth = 450
-MWHeight = 600
-
-//Test if running in dev environment - if so set default pic there
-//else set default pic to package format 
+PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
 	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
 else
 	DefaultPic$ = "../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
 endif
+MWWidth = 450
+MWHeight = 600
+dim L$(1)
 
 ##########################
 ######Preliminary Commands#####
@@ -90,6 +88,57 @@ while(not leavingLoop)
 wend
 CloseWindow()
 
+sub CheckConnection()
+	local connected, connected$, getout
+	textedit clear "InfoBox"
+	//check if we are running on a modern version of haiku
+	/////////////////////////////////////////////////////////////////////////////////////
+	textedit add "InfoBox", "Checking Haiku  ...\n"
+	if FileExists("/boot/system/bin/pkgman") then
+		textedit add "InfoBox", "OK, pkgman found.\n"
+		pause 0.5
+	else
+		alert "This does not look like a Haiku installation with package management.", "OK", "warning" 
+		return 1
+	endif
+	close #1
+	
+	//check if internet connection is live by pinging a google server
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	while(connected = 0)
+		textedit add "InfoBox", "Checking internet  ...\n"
+		connected$=system$("ping -c 1 216.58.223.36")
+		if instr(connected$, "64 bytes from 216.58.223.36") = 0 then
+			getout = alert "Internet connection is required for this program. Please switch on your connection", "OK","Quit","","warning"
+			if getout = 2 return 1
+		else
+			textedit add "InfoBox", "OK, connected.\n"
+			connected =1
+			pause 0.5
+		endif	
+	wend
+	
+	//check if my repo is loaded
+	///////////////////////////////////////////
+	connected = 0
+	while(connected = 0)
+		textedit add "InfoBox", "Checking repo ...\n"
+		connected$ = system$("pkgman list-repos")
+		if instr(connected$, "clasqm's") = 0 then
+			getout = alert "This program requires that the clasqm repository be added to your repo list. Proceed?", "OK","Quit","","warning"
+			if getout = 2 then
+				return 1
+			else
+				system("pkgman add-repo clasquin-johnson.co.za/michel/repo")
+			endif
+		else
+			textedit add "InfoBox", "OK, repo found.\n"
+			pause 0.5
+			connected = 1
+		endif
+	wend
+end sub
+
 sub CloseWindow()
 	//Close down the main window
 	system("rm -f " + AppletsFile$ + " &")
@@ -122,6 +171,22 @@ sub DrawPreview(TheFile$)
 	tip$ = tip$ + "File size:  " + str$(val(system$("filesize " + TheFile$))/1024) + " Kilobytes\n" 
 	tip$ = tip$ + "Dimensions: " + GetGeometry$(TheFile$)
 	tooltip "Preview", tip$
+end sub
+
+sub FillInstallableList()
+	local instlabel, a$
+	instlabel = 1
+	listbox clear "InstallableList"
+	restore installable
+	read a$
+	while(a$ <> "end_of_data")
+		listbox add "InstallableList", a$
+		read a$
+		L$(instlabel) = a$
+		instlabel = instlabel + 1
+		dim L$(instlabel)
+		read a$
+	wend
 end sub
 
 sub FillInstalledList()
@@ -218,6 +283,8 @@ sub OpenWindow()
 	DrawEmptyPreview()
 	DrawPreview(DefaultPic$)
 	FillInstalledList()
+	FillInstallableList()
+	CheckConnection()
 end sub
 
 sub ScanDirForApplets(dir$, mode$)
@@ -238,15 +305,15 @@ end sub
 ###DATA statements, if any, come here###
 ########################################
 
-label installables
-data "AddBorderToImage"
-data "AddRaisedBorderToImage"
-data "AddSunkenBorderToImage"
-data "EmbossImage"
-data "FlipImage"
-data "FlopImage"
-data "NegateImage"
-data "PolaroidImage"
-data "RotateImage"
+label installable
+data "AddBorderToImage", "Add a coloured border to an image and save the resulting image, using ImageMagick."
+data "AddRaisedBorderToImage", "Add a raised border to an image and save the resulting image, using ImageMagick."
+data "AddSunkenBorderToImage", "Add a sunken border to an image and save the resulting image, using ImageMagick."
+data "EmbossImage", "mboss images and save the resulting image using ImageMagick."
+data "FlipImage", "Flip images vertically and save the resulting image using ImageMagick."
+data "FlopImage", "Flip images horizontally and save the resulting image using ImageMagick."
+data "NegateImage", "Negate images (replace every pixel with its complementary colour) and save the resulting image using ImageMagick."
+data "PolaroidImage", "Simulate a polaroid photo from an image (set a white border and rotate it) and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type."
+data "RotateImage", "Rotate an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type."
 data "end_of_data"
 
