@@ -1,0 +1,35 @@
+name				charcoalsketchimage
+version				0.1-2
+architecture			x86_gcc2
+
+summary			"Make a charcoal sketch of an image"
+Description			"A small applet to apply the charcoal sketch filter to an image and save the resulting image, using ImageMagick.
+
+The non-interactive script will grab the default saved from the GUI version. If this does not exist, it defaults to a line thickness of 3.
+
+Planned to be part of a larger graphics workflow application, but can be used standalone.
+
+Menu position: Applications | Graphics
+"
+
+packager			"Michel Clasquin-Johnson <clasqm@mail.com>"
+vendor				"clasqm"
+copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
+licenses				"Public Domain"
+provides {
+					charcoalsketchimage = 0.1-2
+}
+requires {
+					yab
+					imagemagick
+					filedate
+					filesize
+					imagsize
+					libclasqm
+}
+URLs {
+					http://clasquin-johnson.co.za/michel/haiku
+}
+source-urls {
+					https://github.com/clasqm/GraphicsWorkflow
+}

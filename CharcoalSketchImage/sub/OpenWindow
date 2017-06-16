@@ -1,0 +1,23 @@
+sub OpenWindow(sequence)
+	//Setup the main window here
+	GetCoordinates()
+	window open startx,starty to endx,endy, "MainWindow", ProgramName$
+	window set "MainWindow", "flags", "not-resizable"
+	window set "MainWindow", "flags", "not-zoomable"
+	window set "MainWindow", "flags", "Accept-First-Click"
+	if sequence window set "MainWindow", "look", "modal"
+	MakeMenu(sequence)
+	text 0,23 to winwidth, 36, "PreviewText", "Image Preview", "MainWindow"
+	text set "PreviewText", "align-center"
+	draw rect 4,39 to winwidth - 4, winwidth - 10 + 41, "MainWindow"
+	view 5, 40 to winwidth - 5, winwidth - 10 + 40, "Preview", "MainWindow"
+	if not(sequence) view dropzone "Preview"
+	DrawEmptyPreview()
+	DrawPreview(sequence, TheFile$)
+	slider 5,winwidth + 35 to winwidth - 5, winwidth + 55, "LineThicknessWidget", "Line thickness", 1, 10, "triangle", "MainWindow"
+	slider label "LineThicknessWidget", "1", "10"
+	slider set "LineThicknessWidget", "bottom", 10
+	slider set "LineThicknessWidget", GetSliderDefault()
+	MakeButtons(sequence)
+end sub
+

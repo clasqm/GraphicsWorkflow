@@ -1,0 +1,10 @@
+sub SaveDefaults()
+	local slant$, slant,handle
+		handle = open(SettingsFile$,"w")
+		slant = slider get "LineThicknessWidget"
+		slant$ = str$(slant)
+		print #handle slant$
+		close #handle
+		alert "default saved as thickness of " + slant$ + ".", "Ok", "info"
+end sub
+

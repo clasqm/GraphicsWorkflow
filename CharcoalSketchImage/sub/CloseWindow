@@ -1,0 +1,9 @@
+sub CloseWindow()
+	//Close down the main window and exit
+	//This should be the ONLY exit point
+	if window get "MainWindow", "exists" window close "MainWindow"
+	system("rm -f " + TempFile$)
+	print "'" + TheFile$ + "'"
+	exit
+end sub
+

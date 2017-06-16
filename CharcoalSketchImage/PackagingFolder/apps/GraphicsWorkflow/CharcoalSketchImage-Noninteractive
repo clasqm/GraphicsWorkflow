@@ -1,0 +1,36 @@
+#!yab
+
+doc CharcoalSketchImage-Noninteractive
+doc .
+doc Michel Clasquin-Johnson, 2017, Public Domain
+doc .
+doc grabs default established with the GUI version, 
+doc otherwise defaults to line thickness 3.
+
+import libclasqm_main
+SettingsFile$="/boot/home/config/settings/charcoalsketchimage.settting"
+
+if peek("argument")<>0 then 
+	TheFile$ = peek$("argument")
+else
+	exit
+endif
+
+system("mogrify -background Transparent -charcoal " + GetSliderDefault$() + " '" + TheFile$ + "'")
+system("mimeset -F '" + TheFile$ + "'")
+
+print "'" + TheFile$ + "'"
+
+exit
+
+sub GetSliderDefault$()
+	local thickness$, thickness,handle
+	if FileExists(SettingsFile$) then
+		handle = open(SettingsFile$,"r")
+		input #handle thickness$
+		close #handle
+	else
+		thickness = 3
+	endif
+	return thickness$
+end sub
