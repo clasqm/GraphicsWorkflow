@@ -84,6 +84,8 @@ while(not leavingLoop)
 			default:
 				break
 		end switch
+		if instr(msg$(everyCommand), "InstalledList:_Select") SelectInstalled(mid$(msg$(everyCommand), 23))
+		if instr(msg$(everyCommand), "InstalledList:_Invoke") SelectInstalled(mid$(msg$(everyCommand), 23))
 	next everyCommand
 wend
 CloseWindow()
@@ -101,8 +103,6 @@ sub CheckConnection()
 		alert "This does not look like a Haiku installation with package management.", "OK", "warning" 
 		return 1
 	endif
-	close #1
-	
 	//check if internet connection is live by pinging a google server
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	while(connected = 0)
@@ -233,6 +233,12 @@ sub GetWindowDimension(dimension$)
 	end switch
 end sub
 
+sub InvokeInstalled()
+
+
+
+end sub
+
 sub MakeMenu()
 	//Create menu in MainWindow
 	menu "File", "Save", "S", "MainWindow"
@@ -301,6 +307,33 @@ sub ScanDirForApplets(dir$, mode$)
 	endif
 end sub
 
+sub SelectInstalled(listitem$)
+	local listitem, listitempic$, handle, tempvar$, changed, canonical$
+	listitem=val(listitem$)
+	listitem$ = listbox get$ "InstalledList", listitem
+	listitempic$ = listitem$ + ".jpg"
+	handle = open(PicFile$, "r")
+	while(not(eof(handle)))
+		input #handle tempvar$
+		if instr(tempvar$, listitem$) then 
+			listitempic$ = tempvar$
+			DrawEmptyPreview()
+			DrawPreview(listitempic$)
+			changed =1
+		endif
+	wend
+	close #handle
+	if changed = 0 then
+		DrawEmptyPreview()
+		DrawPreview(DefaultPic$)
+	endif
+	tempvar$ = ""
+	canonical$ = StripLFoffSysCmd$(system$("readlink -f `which " + lower$(listitem$) + "`"))
+	tempvar$ = attribute get$ "GraphicsWorkflow:Info", canonical$
+	textedit clear "InfoBox"
+	textedit add "InfoBox", tempvar$
+end sub
+
 ########################################
 ###DATA statements, if any, come here###
 ########################################
@@ -309,7 +342,8 @@ label installable
 data "AddBorderToImage", "Add a coloured border to an image and save the resulting image, using ImageMagick."
 data "AddRaisedBorderToImage", "Add a raised border to an image and save the resulting image, using ImageMagick."
 data "AddSunkenBorderToImage", "Add a sunken border to an image and save the resulting image, using ImageMagick."
-data "EmbossImage", "mboss images and save the resulting image using ImageMagick."
+data "CharcoalSketchImage", "Make a charcoal sketch of an image and save the resulting image, using ImageMagick."
+data "EmbossImage", "Emboss images and save the resulting image using ImageMagick."
 data "FlipImage", "Flip images vertically and save the resulting image using ImageMagick."
 data "FlopImage", "Flip images horizontally and save the resulting image using ImageMagick."
 data "NegateImage", "Negate images (replace every pixel with its complementary colour) and save the resulting image using ImageMagick."

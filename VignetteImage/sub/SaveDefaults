@@ -1,0 +1,10 @@
+sub SaveDefaults()
+	local blurfactor$, blurfactor,handle
+		handle = open(SettingsFile$,"w")
+		blurfactor = slider get "LineThicknessWidget"
+		blurfactor$ = str$(blurfactor)
+		print #handle blurfactor$
+		close #handle
+		alert "default saved as blur factor of " + blurfactor$ + ".", "Ok", "info"
+end sub
+

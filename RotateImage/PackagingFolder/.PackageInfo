@@ -1,5 +1,5 @@
 name				rotateimage
-version				0.1-2
+version				0.1-3
 architecture			x86_gcc2
 
 summary			"Rotate images"
@@ -17,7 +17,7 @@ vendor				"clasqm"
 copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
 licenses				"Public Domain"
 provides {
-					rotateimage = 0.1-2
+					rotateimage = 0.1-3
 }
 requires {
 					yab

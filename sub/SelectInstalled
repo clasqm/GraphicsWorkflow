@@ -1,0 +1,27 @@
+sub SelectInstalled(listitem$)
+	local listitem, listitempic$, handle, tempvar$, changed, canonical$
+	listitem=val(listitem$)
+	listitem$ = listbox get$ "InstalledList", listitem
+	listitempic$ = listitem$ + ".jpg"
+	handle = open(PicFile$, "r")
+	while(not(eof(handle)))
+		input #handle tempvar$
+		if instr(tempvar$, listitem$) then 
+			listitempic$ = tempvar$
+			DrawEmptyPreview()
+			DrawPreview(listitempic$)
+			changed =1
+		endif
+	wend
+	close #handle
+	if changed = 0 then
+		DrawEmptyPreview()
+		DrawPreview(DefaultPic$)
+	endif
+	tempvar$ = ""
+	canonical$ = StripLFoffSysCmd$(system$("readlink -f `which " + lower$(listitem$) + "`"))
+	tempvar$ = attribute get$ "GraphicsWorkflow:Info", canonical$
+	textedit clear "InfoBox"
+	textedit add "InfoBox", tempvar$
+end sub
+

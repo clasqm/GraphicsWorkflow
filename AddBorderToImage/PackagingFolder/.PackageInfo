@@ -1,5 +1,5 @@
 name				addbordertoimage
-version				0.1-1
+version				0.1-2
 architecture			x86_gcc2
 
 summary			"Add a border to images"
@@ -19,7 +19,7 @@ vendor				"clasqm"
 copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
 licenses				"Public Domain"
 provides {
-					addbordertoimage = 0.1-1
+					addbordertoimage = 0.1-2
 }
 requires {
 					yab

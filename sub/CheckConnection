@@ -11,8 +11,6 @@ sub CheckConnection()
 		alert "This does not look like a Haiku installation with package management.", "OK", "warning" 
 		return 1
 	endif
-	close #1
-	
 	//check if internet connection is live by pinging a google server
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	while(connected = 0)

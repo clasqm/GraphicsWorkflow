@@ -21,6 +21,8 @@ while(not leavingLoop)
 			default:
 				break
 		end switch
+		if instr(msg$(everyCommand), "InstalledList:_Select") SelectInstalled(mid$(msg$(everyCommand), 23))
+		if instr(msg$(everyCommand), "InstalledList:_Invoke") SelectInstalled(mid$(msg$(everyCommand), 23))
 	next everyCommand
 wend
 CloseWindow()

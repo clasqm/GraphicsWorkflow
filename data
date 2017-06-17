@@ -6,7 +6,7 @@ label installable
 data "AddBorderToImage", "Add a coloured border to an image and save the resulting image, using ImageMagick."
 data "AddRaisedBorderToImage", "Add a raised border to an image and save the resulting image, using ImageMagick."
 data "AddSunkenBorderToImage", "Add a sunken border to an image and save the resulting image, using ImageMagick."
-data :CharcoalSketchImage", "Make a charcoal sketch of an image and save the resulting image, using ImageMagick."
+data "CharcoalSketchImage", "Make a charcoal sketch of an image and save the resulting image, using ImageMagick."
 data "EmbossImage", "Emboss images and save the resulting image using ImageMagick."
 data "FlipImage", "Flip images vertically and save the resulting image using ImageMagick."
 data "FlopImage", "Flip images horizontally and save the resulting image using ImageMagick."

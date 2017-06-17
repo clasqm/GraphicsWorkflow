@@ -1,0 +1,14 @@
+sub GetSliderDefault()
+	local thickness$, thickness,handle
+	if FileExists(SettingsFile$) then
+		handle = open(SettingsFile$,"r")
+		input #handle thickness$
+		thickness = val(thickness$)
+		close #handle
+	else
+		thickness = 5
+	endif
+	
+	return thickness
+end sub
+

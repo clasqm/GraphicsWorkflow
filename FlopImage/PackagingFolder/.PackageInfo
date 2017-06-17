@@ -1,5 +1,5 @@
 name				flopimage
-version				0.1-1
+version				0.1-2
 architecture			x86_gcc2
 
 summary			"Flip images horizontally"
@@ -15,7 +15,7 @@ vendor				"clasqm"
 copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
 licenses				"Public Domain"
 provides {
-					flopimage = 0.1-1
+					flopimage = 0.1-2
 }
 requires {
 					yab

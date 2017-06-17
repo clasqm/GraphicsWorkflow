@@ -11,10 +11,10 @@
 ##Fill in these fields with your own particulars.
 ##The variables will be used in the About Box and in naming the program.
  
-ProgramName$ = "CharcoalSketchImage"
+ProgramName$ = "VignetteImage"
 AuthorName$ = "Michel Clasquin-Johnson"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "Transform an image into a charcoal sketch"
+ProgramBriefDescription$ = "Transform an image into an oval vignette."
 ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Pete Goodeve"
 
@@ -54,7 +54,7 @@ Action$ = ""
 ProjectBasePath$ = "/boot/home"
 ProjectName$=""
 TempFile$ = TempDir$() + "/" + time$
-SettingsFile$="/boot/home/config/settings/charcoalsketchimage.settting"
+SettingsFile$="/boot/home/config/settings/vignetteimage.settting"
 
 ##########################
 ######Preliminary Commands#####
@@ -105,9 +105,9 @@ while(not leavingLoop)
 				DrawEmptyPreview()
 				DrawPreview(0)
 				break
-			case "MainWindow:File:Charcoal the Image and Quit"
+			case "MainWindow:File:Vignette the Image and Quit"
 			case "doitandquitbutton"
-				system(" -background Transparent mogrify -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				system("mogrify -background black mogrify -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -126,9 +126,9 @@ while(not leavingLoop)
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
 				system("mimeset -F " + TheFile$)
 				break
-			case "MainWindow:Edit:Charcoal the Image"
+			case "MainWindow:Edit:Vignette the Image"
 			case "doitbutton"
-				system("mogrify  -background Transparent -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				system("mogrify -background black mogrify -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
@@ -261,7 +261,7 @@ sub GetSliderDefault()
 		thickness = val(thickness$)
 		close #handle
 	else
-		thickness = 3
+		thickness = 5
 	endif
 	
 	return thickness
@@ -274,10 +274,10 @@ sub MakeButtons(sequence)
 	bottomrowx2 = winwidth/2 + 10: midrowx2 = winwidth/2 + 10: toprowx2 = winwidth/2 + 10
 	if sequence then 
 		button toprowx1, toprowy to  winwidth - toprowx1, toprowy + 25, "doitandquitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitandquitbutton", "Charcoal this image,update the\npreview, save the file and quit."
+		tooltip "doitandquitbutton", "Vignette this image,update the\npreview, save the file and quit."
 	else
 		button toprowx1, toprowy to toprowx2-10, toprowy + 25, "doitbutton", "DO IT!", "MainWindow" 
-		tooltip "doitbutton", "Charcoal this image and then\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
+		tooltip "doitbutton", "Vignette this image and then\nupdate the preview. Changes are\nmade to a temporary file and will only\nbe made permanent when you click\nSave or SaveAs."
 		button toprowx2, toprowy to winwidth - toprowx1, toprowy + 25, "revertbutton", "Revert","MainWindow" 
 		tooltip "revertbutton", "Revert changes."
 	endif
@@ -299,13 +299,13 @@ end sub
 sub MakeMenu(sequence)
 	//Create menu in MainWindow
 	if sequence then
-		menu "File", "Charcoal the Image and Quit", "Q", "MainWindow"
+		menu "File", "Vignette the Image and Quit", "Q", "MainWindow"
 	else
 		menu "File", "Quit", "Q", "MainWindow"
 		menu "File", "Open", "O", "MainWindow"
 		menu "File", "Save", "S", "MainWindow"
 		menu "File", "Save As ...", "", "MainWindow"
-		menu "Edit", "Charcoal the Image", "A", "MainWindow"
+		menu "Edit", "Vignette the Image", "A", "MainWindow"
 		menu "Edit", "Revert action", "", "MainWindow"
 		menu "Edit", "Save defaults", "", "MainWindow"
 		menu "File", "View", "V", "MainWindow"
@@ -329,21 +329,21 @@ sub OpenWindow(sequence)
 	if not(sequence) view dropzone "Preview"
 	DrawEmptyPreview()
 	DrawPreview(sequence, TheFile$)
-	slider 5,winwidth + 35 to winwidth - 5, winwidth + 55, "LineThicknessWidget", "Line thickness", 1, 10, "triangle", "MainWindow"
-	slider label "LineThicknessWidget", "1", "10"
+	slider 5,winwidth + 35 to winwidth - 5, winwidth + 55, "LineThicknessWidget", "Blur factor", 0, 100, "triangle", "MainWindow"
+	slider label "LineThicknessWidget", "1", "100"
 	slider set "LineThicknessWidget", "bottom", 10
 	slider set "LineThicknessWidget", GetSliderDefault()
 	MakeButtons(sequence)
 end sub
 
 sub SaveDefaults()
-	local slant$, slant,handle
+	local blurfactor$, blurfactor,handle
 		handle = open(SettingsFile$,"w")
-		slant = slider get "LineThicknessWidget"
-		slant$ = str$(slant)
-		print #handle slant$
+		blurfactor = slider get "LineThicknessWidget"
+		blurfactor$ = str$(blurfactor)
+		print #handle blurfactor$
 		close #handle
-		alert "default saved as thickness of " + slant$ + ".", "Ok", "info"
+		alert "default saved as blur factor of " + blurfactor$ + ".", "Ok", "info"
 end sub
 
 sub TestGraphic()
