@@ -36,16 +36,16 @@ system("mkdir -p " + nonpackageddir$)
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+SequenceTempFile$ = TempDir$() + "/GraphicsWorkflow.sequence"
 AppletsPropertiesFile$ = TempDir$() + "/GraphicsWorkflow.properties"
 PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
 	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
 else
-	DefaultPic$ = "../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
+	DefaultPic$ = WhereAmI$() +"/../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
 endif
 MWWidth = 450
 MWHeight = 600
-dim Z$(1)
 
 ##########################
 ######Preliminary Commands#####
@@ -55,10 +55,7 @@ dim Z$(1)
 ## e.g. setting up a window with a menu.
  
 GetApplets() 
- 
-OpenWindow()
-
- 
+ OpenWindow()
  
  
 #######End of Prologue#######
@@ -86,6 +83,9 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Sequence:Clear Sequence"
 				listbox clear "SequenceList"
+				break
+			case "MainWindow:Sequence:Generate Sequence"
+				GenerateSequence()
 				break
 			default:
 				break
@@ -210,6 +210,25 @@ sub FillInstalledList()
 	close r
 end sub
 
+sub GenerateSequence()
+	local handle, sequencecount, item$
+	sequencecount = listbox count "SequenceList"
+	if sequencecount = 0 then
+		return
+	elseif sequencecount = 1
+		alert "A sequence must have two or more elements,\notherwise just run the applet itself.", "Ok", "info" 
+		return
+	else
+		handle = open(SequenceTempFile$, "w")
+		print #handle "#/yab"
+		for f = 1 to sequencecount
+			item$ = listbox get$ "SequenceList", f
+			print #handle "a$ = system$(lower$(\"" + item$ + "\") " + " + \" \" + a$)"
+		next f	
+		close handle
+	endif
+end sub
+
 sub GetApplets()
 	ScanDirForApplets(developerdir$, "w")
 	ScanDirForApplets(systemdir$, "a")
@@ -268,23 +287,28 @@ sub OpenWindow()
 	windowwidth = GetWindowDimension("w")
 	windowheight = GetWindowDimension("h")
 	MakeMenu()
+	
 	//Installed applets
 	text 5,25, "InstalledText", "Installed:", "MainWindow"
 	listbox 5,40 to windowwidth /2 -5, windowheight / 3 * 2, "InstalledList", 1, "MainWindow"
 	tooltip "InstalledList", "Single-click to select,\ndouble-click to add to sequence."
+	
 	//installable applets
 	text 5,windowheight / 3 * 2 + 10, "InstallableText", "Installable:", "MainWindow"
 	listbox 5,windowheight / 3 * 2 + 25 to windowwidth /2 -5, windowheight -5, "InstallableList", 1, "MainWindow"
 	tooltip "InstallableList", "Single-click to select,\ndouble-click to install."
+	
 	//Sequence
 	text windowwidth/2 + 5,25, "SequenceText", "Sequence:", "MainWindow"
 	listbox windowwidth/2 + 5,40 to windowwidth- 5, windowheight / 2, "SequenceList", 1, "MainWindow"
 	tooltip "SequenceList", "Double-click to delete"
+	
 	//Info
 	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
 	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
 	textedit set "InfoBox", "editable", false
-	//Example
+	
+	//Example window
 	text windowwidth/2 + 5,windowheight / 3 * 2 + 10, "ExampleText", "Example:", "MainWindow"
 	examplewidth = windowwidth/2 - 10
 	exampleheight = windowheight - (windowheight / 3 * 2) - 35
@@ -301,8 +325,12 @@ sub OpenWindow()
 	view examplex, exampley to examplex + examplewidth, exampley + exampleheight, "Preview", "MainWindow"
 	DrawEmptyPreview()
 	DrawPreview(DefaultPic$)
+	
+	//fill the listboxes
 	FillInstalledList()
 	FillInstallableList()
+	
+	//check if we have internet access
 	CheckConnection()
 end sub
 

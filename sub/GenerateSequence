@@ -1,0 +1,19 @@
+sub GenerateSequence()
+	local handle, sequencecount, item$
+	sequencecount = listbox count "SequenceList"
+	if sequencecount = 0 then
+		return
+	elseif sequencecount = 1
+		alert "A sequence must have two or more elements,\notherwise just run the applet itself.", "Ok", "info" 
+		return
+	else
+		handle = open(SequenceTempFile$, "w")
+		print #handle "#/yab"
+		for f = 1 to sequencecount
+			item$ = listbox get$ "SequenceList", f
+			print #handle "a$ = system$(lower$(\"" + item$ + "\") " + " + \" \" + a$)"
+		next f	
+		close handle
+	endif
+end sub
+

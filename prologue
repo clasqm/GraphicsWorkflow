@@ -36,16 +36,16 @@ system("mkdir -p " + nonpackageddir$)
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+SequenceTempFile$ = TempDir$() + "/GraphicsWorkflow.sequence"
 AppletsPropertiesFile$ = TempDir$() + "/GraphicsWorkflow.properties"
 PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
 	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
 else
-	DefaultPic$ = "../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
+	DefaultPic$ = WhereAmI$() +"/../../data/artwork/GraphicsWorkflow/GW_Original.jpg"
 endif
 MWWidth = 450
 MWHeight = 600
-dim Z$(1)
 
 ##########################
 ######Preliminary Commands#####
@@ -55,10 +55,7 @@ dim Z$(1)
 ## e.g. setting up a window with a menu.
  
 GetApplets() 
- 
-OpenWindow()
-
- 
+ OpenWindow()
  
  
 #######End of Prologue#######

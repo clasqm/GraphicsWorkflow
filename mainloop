@@ -22,6 +22,9 @@ while(not leavingLoop)
 			case "MainWindow:Sequence:Clear Sequence"
 				listbox clear "SequenceList"
 				break
+			case "MainWindow:Sequence:Generate Sequence"
+				GenerateSequence()
+				break
 			default:
 				break
 		end switch
