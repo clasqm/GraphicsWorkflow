@@ -1,0 +1,13 @@
+sub SelectInstallable(listitem$)
+	local listitem, result$, position
+	listitem=val(listitem$)
+	listitem$ = lower$(listbox get$ "InstallableList", listitem)
+	result$ = StripLFoffSysCmd$(system$("pkgman search " + listitem$))
+	position = instr(result$, listitem$)
+	
+	if position <> 0 result$ = mid$(result$, position + len(listitem$) + 1) 
+	textedit clear "InfoBox"
+	textedit add "InfoBox", result$
+	DrawEmptyPreview()
+end sub
+

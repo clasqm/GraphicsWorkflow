@@ -31,10 +31,12 @@ DEBUG = 1
 //change this to DEBUG = 0 when you are ready to bind the program for distribution
 systemdir$ = "/boot/system/apps/GraphicsWorkflow"
 userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
-nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
+nonpackageddir$ = "/boot/home/config/non-packaged/apps/GraphicsWorkflow"
+system("mkdir -p " + nonpackageddir$) 
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+AppletsPropertiesFile$ = TempDir$() + "/GraphicsWorkflow.properties"
 PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
 	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
@@ -43,7 +45,7 @@ else
 endif
 MWWidth = 450
 MWHeight = 600
-dim L$(1)
+dim Z$(1)
 
 ##########################
 ######Preliminary Commands#####

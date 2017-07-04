@@ -1,16 +1,19 @@
 sub FillInstallableList()
-	local instlabel, a$
+	local instlabel, a$, installed$, L$(1)
+	for f = 1 to listbox count "InstalledList"
+		installed$ = installed$ + " " + listbox get$ "InstalledList", f 
+	next f
 	instlabel = 1
 	listbox clear "InstallableList"
 	restore installable
 	read a$
 	while(a$ <> "end_of_data")
-		listbox add "InstallableList", a$
+		if not(instr(installed$, a$)) listbox add "InstallableList", a$
 		read a$
 		L$(instlabel) = a$
 		instlabel = instlabel + 1
 		dim L$(instlabel)
-		read a$
+		//read a$
 	wend
 end sub
 

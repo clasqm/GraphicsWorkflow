@@ -31,10 +31,12 @@ DEBUG = 1
 //change this to DEBUG = 0 when you are ready to bind the program for distribution
 systemdir$ = "/boot/system/apps/GraphicsWorkflow"
 userdir$ = "/boot/home/config/apps/GraphicsWorkflow"
-nonpackageddir$ = "/boot/home/config/non-packaged/apps" 
+nonpackageddir$ = "/boot/home/config/non-packaged/apps/GraphicsWorkflow"
+system("mkdir -p " + nonpackageddir$) 
 developerdir$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/apps/GraphicsWorkflow"
 AppletsFile$ = TempDir$() + "/GraphicsWorkflow.content" 
 AppletsTempFile$ = TempDir$() + "/GraphicsWorkflow.tmp"
+AppletsPropertiesFile$ = TempDir$() + "/GraphicsWorkflow.properties"
 PicFile$ = TempDir$() + "/GraphicsWorkflow.pics"
 if WhereAmI$() = "/boot/home/projects/GraphicsWorkflow/binder" then
 	DefaultPic$ = "/boot/home/projects/GraphicsWorkflow/PackagingFolder/data/artwork/GraphicsWorkflow/GW_Original.jpg"
@@ -43,7 +45,7 @@ else
 endif
 MWWidth = 450
 MWHeight = 600
-dim L$(1)
+dim Z$(1)
 
 ##########################
 ######Preliminary Commands#####
@@ -81,11 +83,16 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Help:About":
 				Alert ProgramName$ + " " + ProgramVersion$ + "\n" + "by " + AuthorName$ +"\n\n" + ProgramBriefDescription$ + "\n" + ProgramLicense$ + "\n" + ProgramAcknowledgements$, "OK", "none"
+				break
+			case "MainWindow:Sequence:Clear Sequence"
+				listbox clear "SequenceList"
+				break
 			default:
 				break
 		end switch
 		if instr(msg$(everyCommand), "InstalledList:_Select") SelectInstalled(mid$(msg$(everyCommand), 23))
-		if instr(msg$(everyCommand), "InstalledList:_Invoke") SelectInstalled(mid$(msg$(everyCommand), 23))
+		if instr(msg$(everyCommand), "InstalledList:_Invoke") InvokeInstalled(mid$(msg$(everyCommand), 23))
+		if instr(msg$(everyCommand), "InstallableList:_Select") SelectInstallable(mid$(msg$(everyCommand), 25))
 	next everyCommand
 wend
 CloseWindow()
@@ -174,18 +181,21 @@ sub DrawPreview(TheFile$)
 end sub
 
 sub FillInstallableList()
-	local instlabel, a$
+	local instlabel, a$, installed$, L$(1)
+	for f = 1 to listbox count "InstalledList"
+		installed$ = installed$ + " " + listbox get$ "InstalledList", f 
+	next f
 	instlabel = 1
 	listbox clear "InstallableList"
 	restore installable
 	read a$
 	while(a$ <> "end_of_data")
-		listbox add "InstallableList", a$
+		if not(instr(installed$, a$)) listbox add "InstallableList", a$
 		read a$
 		L$(instlabel) = a$
 		instlabel = instlabel + 1
 		dim L$(instlabel)
-		read a$
+		//read a$
 	wend
 end sub
 
@@ -233,10 +243,10 @@ sub GetWindowDimension(dimension$)
 	end switch
 end sub
 
-sub InvokeInstalled()
-
-
-
+sub InvokeInstalled(applet$)
+	local listitem
+	listitem = val(applet$)
+	listbox add "SequenceList", listbox get$ "InstalledList", listitem
 end sub
 
 sub MakeMenu()
@@ -261,12 +271,15 @@ sub OpenWindow()
 	//Installed applets
 	text 5,25, "InstalledText", "Installed:", "MainWindow"
 	listbox 5,40 to windowwidth /2 -5, windowheight / 3 * 2, "InstalledList", 1, "MainWindow"
+	tooltip "InstalledList", "Single-click to select,\ndouble-click to add to sequence."
 	//installable applets
 	text 5,windowheight / 3 * 2 + 10, "InstallableText", "Installable:", "MainWindow"
 	listbox 5,windowheight / 3 * 2 + 25 to windowwidth /2 -5, windowheight -5, "InstallableList", 1, "MainWindow"
+	tooltip "InstallableList", "Single-click to select,\ndouble-click to install."
 	//Sequence
 	text windowwidth/2 + 5,25, "SequenceText", "Sequence:", "MainWindow"
 	listbox windowwidth/2 + 5,40 to windowwidth- 5, windowheight / 2, "SequenceList", 1, "MainWindow"
+	tooltip "SequenceList", "Double-click to delete"
 	//Info
 	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
 	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
@@ -307,6 +320,19 @@ sub ScanDirForApplets(dir$, mode$)
 	endif
 end sub
 
+sub SelectInstallable(listitem$)
+	local listitem, result$, position
+	listitem=val(listitem$)
+	listitem$ = lower$(listbox get$ "InstallableList", listitem)
+	result$ = StripLFoffSysCmd$(system$("pkgman search " + listitem$))
+	position = instr(result$, listitem$)
+	
+	if position <> 0 result$ = mid$(result$, position + len(listitem$) + 1) 
+	textedit clear "InfoBox"
+	textedit add "InfoBox", result$
+	DrawEmptyPreview()
+end sub
+
 sub SelectInstalled(listitem$)
 	local listitem, listitempic$, handle, tempvar$, changed, canonical$
 	listitem=val(listitem$)
@@ -339,15 +365,16 @@ end sub
 ########################################
 
 label installable
-data "AddBorderToImage", "Add a coloured border to an image and save the resulting image, using ImageMagick."
-data "AddRaisedBorderToImage", "Add a raised border to an image and save the resulting image, using ImageMagick."
-data "AddSunkenBorderToImage", "Add a sunken border to an image and save the resulting image, using ImageMagick."
-data "CharcoalSketchImage", "Make a charcoal sketch of an image and save the resulting image, using ImageMagick."
-data "EmbossImage", "Emboss images and save the resulting image using ImageMagick."
-data "FlipImage", "Flip images vertically and save the resulting image using ImageMagick."
-data "FlopImage", "Flip images horizontally and save the resulting image using ImageMagick."
-data "NegateImage", "Negate images (replace every pixel with its complementary colour) and save the resulting image using ImageMagick."
-data "PolaroidImage", "Simulate a polaroid photo from an image (set a white border and rotate it) and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type."
-data "RotateImage", "Rotate an image and save the resulting image, using ImageMagick. Transparency is attempted, but will depend on the input file type."
+data "AddBorderToImage"
+data "AddRaisedBorderToImage"
+data "AddSunkenBorderToImage"
+data "CharcoalSketchImage"
+data "EmbossImage"
+data "FlipImage"
+data "FlopImage"
+data "NegateImage"
+data "PolaroidImage"
+data "RotateImage"
+data "VignetteImage"
 data "end_of_data"
 

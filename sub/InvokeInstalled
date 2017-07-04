@@ -1,6 +1,6 @@
-sub InvokeInstalled()
-
-
-
+sub InvokeInstalled(applet$)
+	local listitem
+	listitem = val(applet$)
+	listbox add "SequenceList", listbox get$ "InstalledList", listitem
 end sub
 

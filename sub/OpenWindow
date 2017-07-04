@@ -10,12 +10,15 @@ sub OpenWindow()
 	//Installed applets
 	text 5,25, "InstalledText", "Installed:", "MainWindow"
 	listbox 5,40 to windowwidth /2 -5, windowheight / 3 * 2, "InstalledList", 1, "MainWindow"
+	tooltip "InstalledList", "Single-click to select,\ndouble-click to add to sequence."
 	//installable applets
 	text 5,windowheight / 3 * 2 + 10, "InstallableText", "Installable:", "MainWindow"
 	listbox 5,windowheight / 3 * 2 + 25 to windowwidth /2 -5, windowheight -5, "InstallableList", 1, "MainWindow"
+	tooltip "InstallableList", "Single-click to select,\ndouble-click to install."
 	//Sequence
 	text windowwidth/2 + 5,25, "SequenceText", "Sequence:", "MainWindow"
 	listbox windowwidth/2 + 5,40 to windowwidth- 5, windowheight / 2, "SequenceList", 1, "MainWindow"
+	tooltip "SequenceList", "Double-click to delete"
 	//Info
 	text windowwidth/2 + 5, windowheight / 2 +10, "InfoText", "Info:",  "MainWindow"
 	textedit windowwidth/2 + 5,windowheight / 2 +25 to windowwidth- 5, windowheight /3* 2, "InfoBox", 1, "MainWindow"
