@@ -14,7 +14,7 @@
 ProgramName$ = "EmbossImage"
 AuthorName$ = "Michel Clasquin-Johnson"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "Apply Ebossing effect to  images"
+ProgramBriefDescription$ = "Apply Embossing effect to  images"
 ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Pete Goodeve"
 
@@ -38,6 +38,7 @@ DEBUG = 0
 
 TheFile$ = "" 
 sequence = 0
+hasdefaults = 0
 
 //The dimensions of the window
 startx = 0 // horizontal starting point of window
@@ -106,8 +107,9 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Emboss the Image and Quit"
 			case "doitandquitbutton"
+				DisableWidgets()
 				system("barberpole_embossimage &")
-				system("mogrify -emboss 100 " + TempFile$)
+				system("mogrify -quiet -emboss 100 " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
@@ -127,13 +129,15 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Emboss the Image"
 			case "doitbutton"
+				DisableWidgets()
 				system("barberpole_embossimage &")
-				system("mogrify -emboss 100 " + TempFile$)
+				system("mogrify -quiet -emboss 100 " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				option set "revertbutton", "enabled", 1
 				menu set "Edit", "Revert action", "enable", "MainWindow"
 				a = message send "application/x-vnd.barberpole_embossimage", "quit"
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"
@@ -176,6 +180,31 @@ sub CloseWindow()
 	exit
 end sub
 
+sub DisableWidgets()
+	if sequence then
+		menu set "File", "Emboss the Image and Quit", "disable", "MainWindow"
+		option set "doitandquitbutton", "enabled", 0
+	else
+		menu set "Edit", "Revert action", "disable", "MainWindow"
+		option set "revertbutton", "enabled", 0
+		menu set "File", "Quit", "disable", "MainWindow"
+		menu set "File", "Open", "disable", "MainWindow"
+		menu set "File", "Save", "disable", "MainWindow"
+		option set "savebutton", "enabled", 0
+		menu set "File", "Save As ...", "disable", "MainWindow"
+		option set "saveasbutton", "enabled", 0
+		menu set "Edit", "Emboss the Image", "disable", "MainWindow"
+		option set "doitbutton", "enabled", 0
+		menu set "File", "View", "disable", "MainWindow"
+		option set "viewbutton", "enabled", 0
+	endif
+	if hasdefaults then
+		menu set "Edit", "Save defaults", "disable", "MainWindow"
+		option set "savedefaultbutton", "enabled", 0
+	endif
+	menu set "Help", "About", "disable", "MainWindow"
+end sub
+
 sub DrawEmptyPreview()
 	//fill preview box with grey so that if you load a picture
 	//with different dimensions, the old one does not 
@@ -200,6 +229,32 @@ sub DrawPreview(sequence, TheFile2$)
 	tip$ = tip$ + "Dimensions: " + GetGeometry$()
 	if not(sequence) tip$ = tip$ + "\nDrop a file here to start on a new image."
 	tooltip "Preview", tip$
+end sub
+
+sub EnableWidgets()
+	if sequence then
+		menu set "File", "Emboss the Image and Quit", "enable", "MainWindow"
+		option set "doitandquitbutton", "enabled", 1
+	else
+		menu set "Edit", "Revert action", "enable", "MainWindow"
+		option set "revertbutton", "enabled", 1
+		menu set "File", "Quit", "enable", "MainWindow"
+		menu set "File", "Open", "enable", "MainWindow"
+		menu set "File", "Save", "enable", "MainWindow"
+		option set "savebutton", "enabled", 1
+		menu set "File", "Save As ...", "enable", "MainWindow"
+		option set "saveasbutton", "enabled", 1
+		menu set "Edit", "Emboss the Image", "enable", "MainWindow"
+		option set "doitbutton", "enabled", 1
+		menu set "File", "View", "enable", "MainWindow"
+		option set "viewbutton", "enabled", 1
+		menu set "Help", "About", "enable", "MainWindow"
+	endif
+	if hasdefaults then
+		menu "set Edit", "Save defaults", "enable", "MainWindow"
+		option set "savedefaultbutton", "enabled", 1
+	endif
+	menu set "Help", "About", "enable", "MainWindow"
 end sub
 
 sub GetCoordinates()
@@ -275,11 +330,11 @@ sub MakeButtons(sequence)
 	button bottomrowx2, bottomrowy to winwidth - bottomrowx1, bottomrowy + 25, "saveasbutton", "Save As ...", "MainWindow" 	
 	tooltip "saveasbutton", "Save the currently displayed image\nto a new file. If this action is part\nof a sequence, the new file will be\npassed to the next command."
 	if sequence then
+		option set "revertbutton", "enabled", 0
 		option set "savebutton", "enabled", 0
 		option set "saveasbutton", "enabled", 0
 		option set "viewbutton", "enabled", 0
 	endif
-	option set "revertbutton", "enabled", 0
 	option set "savedefaultbutton", "enabled", 0
 	tooltip "savedefaultbutton", "This program does not\nhave defaults to save"
 end sub
@@ -318,19 +373,6 @@ sub OpenWindow(sequence)
 	DrawEmptyPreview()
 	DrawPreview(sequence, TheFile$)
 	MakeButtons(sequence)
-end sub
-sub SaveFile()
-	//do the action and save to the same filename
-	//for Imagemagick, use the mogrify command
-
-end sub
-
-sub SaveFileAs()
-	//do the action and save under a new filename
-	//for Imagemagick, use the convert command
-	//just changing the extension will change the filetype
-	//so follow up with a system call to mimeset -F
-
 end sub
 
 sub TestGraphic()

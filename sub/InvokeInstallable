@@ -1,0 +1,4 @@
+sub InvokeInstallable(TheFile$)
+	system("Terminal pkgman install " + lower$(TheFile$) )
+end sub
+

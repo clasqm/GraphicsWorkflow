@@ -20,6 +20,7 @@ sub MakeButtons(sequence)
 	button bottomrowx2, bottomrowy to winwidth - bottomrowx1, bottomrowy + 25, "saveasbutton", "Save As ...", "MainWindow" 	
 	tooltip "saveasbutton", "Save the currently displayed image\nto a new file. If this action is part\nof a sequence, the new file will be\npassed to the next command."
 	if sequence then
+		option set "revertbutton", "enabled", 0
 		option set "savebutton", "enabled", 0
 		option set "saveasbutton", "enabled", 0
 		option set "viewbutton", "enabled", 0

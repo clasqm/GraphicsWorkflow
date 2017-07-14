@@ -16,7 +16,7 @@ else
 	exit
 endif
 
-system("mogrify -background Transparent -charcoal " + GetSliderDefault$() + " '" + TheFile$ + "'")
+system("mogrify -quiet -background Transparent -charcoal " + GetSliderDefault$() + " '" + TheFile$ + "'")
 system("mimeset -F '" + TheFile$ + "'")
 
 print "'" + TheFile$ + "'"

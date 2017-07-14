@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Flip the Image and Quit"
 			case "doitandquitbutton"
-				system("mogrify -flip " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -flip " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
@@ -43,9 +44,11 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Flip the Image"
 			case "doitbutton"
-				system("mogrify -flip " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -flip " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:File:View"
 			case "viewbutton"

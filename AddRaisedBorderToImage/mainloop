@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Add border and Quit"
 			case "doitandquitbutton"
-				system("mogrify -raise " + str$(slider get "ThicknessWidget") + "x" + str$(slider get "ThicknessWidget") + " " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -raise " + str$(slider get "ThicknessWidget") + "x" + str$(slider get "ThicknessWidget") + " " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -44,10 +45,12 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Add border"
 			case "doitbutton"
-				system("mogrify -raise " + str$(slider get "ThicknessWidget") + "x" + str$(slider get "ThicknessWidget") + " " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -raise " + str$(slider get "ThicknessWidget") + "x" + str$(slider get "ThicknessWidget") + " " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"

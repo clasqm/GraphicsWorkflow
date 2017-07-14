@@ -38,12 +38,13 @@ DEBUG = 0
 
 TheFile$ = "" 
 sequence = 0
+hasdefaults = 1
 
 //The dimensions of the window
 startx = 0 // horizontal starting point of window
 endx = 0 // horizontal end point of window
 starty = 0 // vertical starting point of window
-endy = 0 // verticall end point of window
+endy = 0 // vertical end point of window
 
 //You can adjust the figures below to change the dimensions of the window
 winwidth = 280

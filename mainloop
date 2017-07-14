@@ -31,6 +31,7 @@ while(not leavingLoop)
 		if instr(msg$(everyCommand), "InstalledList:_Select") SelectInstalled(mid$(msg$(everyCommand), 23))
 		if instr(msg$(everyCommand), "InstalledList:_Invoke") InvokeInstalled(mid$(msg$(everyCommand), 23))
 		if instr(msg$(everyCommand), "InstallableList:_Select") SelectInstallable(mid$(msg$(everyCommand), 25))
+		if instr(msg$(everyCommand), "InstallableList:_Invoke") InvokeInstallable(mid$(msg$(everyCommand), 25))
 	next everyCommand
 wend
 CloseWindow()

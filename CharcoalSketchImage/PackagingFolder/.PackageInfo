@@ -1,5 +1,5 @@
 name				charcoalsketchimage
-version				0.1-4
+version				0.2-1
 architecture			x86_gcc2
 
 summary			"Make a charcoal sketch of an image"
@@ -17,7 +17,7 @@ vendor				"clasqm"
 copyrights			"Michel Clasquin-Johnson <clasqm@mail.com>"
 licenses				"Public Domain"
 provides {
-					charcoalsketchimage = 0.1-4
+					charcoalsketchimage = 0.2-1
 }
 requires {
 					yab

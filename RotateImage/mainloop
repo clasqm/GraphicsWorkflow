@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Rotate the Image and Quit"
 			case "doitandquitbutton"
-				system(" -background Transparent mogrify -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system(" -background Transparent mogrify -quiet -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -44,10 +45,12 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Rotate the Image"
 			case "doitbutton"
-				system("mogrify  -background Transparent -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -background Transparent -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"

@@ -22,7 +22,9 @@ sub MakeButtons(sequence)
 		option set "saveasbutton", "enabled", 0
 		option set "viewbutton", "enabled", 0
 	endif
-	option set "savedefaultbutton", "enabled", 0
-	tooltip "savedefaultbutton", "This program does not\nhave defaults to save"
+	if hasdefaults = 0 then
+		option set "savedefaultbutton", "enabled", 0
+		tooltip "savedefaultbutton", "This program does not\nhave defaults to save"
+	endif
 end sub
 

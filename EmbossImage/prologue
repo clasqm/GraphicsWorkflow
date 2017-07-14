@@ -14,7 +14,7 @@
 ProgramName$ = "EmbossImage"
 AuthorName$ = "Michel Clasquin-Johnson"
 ProgramVersion$ = "V0.1"
-ProgramBriefDescription$ = "Apply Ebossing effect to  images"
+ProgramBriefDescription$ = "Apply Embossing effect to  images"
 ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Pete Goodeve"
 
@@ -38,6 +38,7 @@ DEBUG = 0
 
 TheFile$ = "" 
 sequence = 0
+hasdefaults = 0
 
 //The dimensions of the window
 startx = 0 // horizontal starting point of window

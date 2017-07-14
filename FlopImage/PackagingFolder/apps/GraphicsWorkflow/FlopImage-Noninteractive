@@ -15,7 +15,7 @@ else
 	exit
 endif
 
-system("mogrify -flop '" + TheFile$ + "'")
+system("mogrify -quiet -flop '" + TheFile$ + "'")
 system("mimeset -F '" + TheFile$ + "'")
 
 print "'" + TheFile$ + "'"

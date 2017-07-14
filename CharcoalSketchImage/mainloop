@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Charcoal the Image and Quit"
 			case "doitandquitbutton"
-				system(" -background Transparent mogrify -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system(" -background Transparent mogrify -quiet -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -44,10 +45,12 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Charcoal the Image"
 			case "doitbutton"
-				system("mogrify  -background Transparent -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet  -background Transparent -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"

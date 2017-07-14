@@ -23,8 +23,9 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Emboss the Image and Quit"
 			case "doitandquitbutton"
+				DisableWidgets()
 				system("barberpole_embossimage &")
-				system("mogrify -emboss 100 " + TempFile$)
+				system("mogrify -quiet -emboss 100 " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
@@ -44,13 +45,15 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Emboss the Image"
 			case "doitbutton"
+				DisableWidgets()
 				system("barberpole_embossimage &")
-				system("mogrify -emboss 100 " + TempFile$)
+				system("mogrify -quiet -emboss 100 " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				option set "revertbutton", "enabled", 1
 				menu set "Edit", "Revert action", "enable", "MainWindow"
 				a = message send "application/x-vnd.barberpole_embossimage", "quit"
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"

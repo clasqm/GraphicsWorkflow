@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Negate the Image and Quit"
 			case "doitandquitbutton"
-				system("mogrify -negate " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -negate " + TempFile$)
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
 				system("cp -f " + TempFile$ + " '" + TheFile$ + "'")
@@ -43,9 +44,11 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Negate the Image"
 			case "doitbutton"
-				system("mogrify -negate " + TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -negate " + TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:File:View"
 			case "viewbutton"

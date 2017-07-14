@@ -23,7 +23,8 @@ while(not leavingLoop)
 				break
 			case "MainWindow:File:Vignette the Image and Quit"
 			case "doitandquitbutton"
-				system("mogrify -background black mogrify -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -background black -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -44,10 +45,12 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Edit:Vignette the Image"
 			case "doitbutton"
-				system("mogrify -background black mogrify -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				DisableWidgets()
+				system("mogrify -quiet -background black -vignette " + str$(slider get "LineThicknessWidget") + "x" +str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				system("mimeset -F " + TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
+				EnableWidgets()
 				break
 			case "MainWindow:Edit:Revert action"
 			case "revertbutton"

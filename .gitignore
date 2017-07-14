@@ -8,6 +8,7 @@ AddBorderToImage/PackagingFolder/**
 AddSunkenBorderToImage/PackagingFolder/**
 AddRaisedBorderToImage/PackagingFolder/**
 VignetteImage/PackagingFolder/**
+RotateImage/PackagingFolder/**
 
 # Backup files #
 ######################
