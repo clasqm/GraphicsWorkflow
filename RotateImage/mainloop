@@ -24,7 +24,7 @@ while(not leavingLoop)
 			case "MainWindow:File:Rotate the Image and Quit"
 			case "doitandquitbutton"
 				DisableWidgets()
-				system(" -background Transparent mogrify -quiet -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
+				system("mogrify -background Transparent -quiet -rotate " + str$(slider get "DegreesWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5

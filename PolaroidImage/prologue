@@ -48,7 +48,7 @@ endy = 0 // verticall end point of window
 
 //You can adjust the figures below to change the dimensions of the window
 winwidth = 280
-winheight = 460
+winheight = 470
 
 //Miscellaneous
 Action$ = ""

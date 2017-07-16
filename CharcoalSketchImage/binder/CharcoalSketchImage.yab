@@ -109,7 +109,7 @@ while(not leavingLoop)
 			case "MainWindow:File:Charcoal the Image and Quit"
 			case "doitandquitbutton"
 				DisableWidgets()
-				system(" -background Transparent mogrify -quiet -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				system("mogrify -background Transparent  -quiet -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5
@@ -343,7 +343,7 @@ sub MakeButtons(sequence)
 	button bottomrowx2, bottomrowy to winwidth - bottomrowx1, bottomrowy + 25, "saveasbutton", "Save As ...", "MainWindow" 	
 	tooltip "saveasbutton", "Save the currently displayed image\nto a new file. If this action is part\nof a sequence, the new file will be\npassed to the next command."
 	if sequence then
-		option set "revertbutton", "enabled", 0
+		//option set "revertbutton", "enabled", 0
 		option set "savebutton", "enabled", 0
 		option set "saveasbutton", "enabled", 0
 		option set "viewbutton", "enabled", 0

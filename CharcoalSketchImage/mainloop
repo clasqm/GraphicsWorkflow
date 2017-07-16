@@ -24,7 +24,7 @@ while(not leavingLoop)
 			case "MainWindow:File:Charcoal the Image and Quit"
 			case "doitandquitbutton"
 				DisableWidgets()
-				system(" -background Transparent mogrify -quiet -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
+				system("mogrify -background Transparent  -quiet -charcoal " + str$(slider get "LineThicknessWidget") + " "+ TempFile$)
 				DrawEmptyPreview()
 				DrawPreview(sequence, TempFile$)
 				pause 1.5

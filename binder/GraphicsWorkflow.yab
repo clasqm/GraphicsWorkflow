@@ -258,6 +258,7 @@ sub GetWindowDimension(dimension$)
 end sub
 
 sub InvokeInstallable(TheFile$)
+	print TheFile$
 	system("Terminal pkgman install " + lower$(TheFile$) )
 end sub
 

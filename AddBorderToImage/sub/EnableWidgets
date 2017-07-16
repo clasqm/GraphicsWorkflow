@@ -4,7 +4,7 @@ sub EnableWidgets()
 		option set "doitandquitbutton", "enabled", 1
 	else
 		menu set "Edit", "Revert action", "enable", "MainWindow"
-		option set "revertbutton", "enabled", 1
+		if sequence = 0 option set "revertbutton", "enabled", 1
 		menu set "File", "Quit", "enable", "MainWindow"
 		menu set "File", "Open", "enable", "MainWindow"
 		menu set "File", "Save", "enable", "MainWindow"
